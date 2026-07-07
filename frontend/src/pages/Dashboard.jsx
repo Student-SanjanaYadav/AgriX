@@ -23,9 +23,11 @@ import AnalysisLoader from '../components/common/AnalysisLoader'
 import TransparentLogo from '../components/common/TransparentLogo'
 import { generateRecommendation } from '../services/recommendationEngine'
 import { fetchWeatherData } from '../services/weatherService'
+import { useLanguage } from '../context/LanguageContext'
 import { generatePDFReport, generateCSVReport, printReport } from '../services/reportService'
 
 const Dashboard = () => {
+  const { language } = useLanguage()
   const [selectedFarm, setSelectedFarm] = useState(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [pendingFarm, setPendingFarm] = useState(null)
@@ -345,11 +347,11 @@ const Dashboard = () => {
     }
 
     if (format === 'csv') {
-      generateCSVReport(reportData)
+      generateCSVReport(reportData, language)
     } else if (format === 'print') {
-      printReport(reportData)
+      printReport(reportData, language)
     } else {
-      generatePDFReport(reportData)
+      generatePDFReport(reportData, language)
     }
   }
 

@@ -5,9 +5,47 @@ import { jsPDF } from 'jspdf'
 import logoImg from '../assets/logo.png'
 
 // Dynamic PDF report generator
-export const generatePDFReport = (data) => {
+export const generatePDFReport = (data, lang = 'en') => {
   if (!data) return
   
+  const isHi = lang === 'hi'
+  const tLabel = (key, defaultVal) => {
+    const translationsHi = {
+      "PRECISION WATER INTELLIGENCE REPORT": "परिशुद्ध जल आसूचना रिपोर्ट",
+      "Empowering Smarter Irrigation Through AI, Geospatial & Predictive Analytics": "एआई, भू-स्थानिक और पूर्वानुमानित विश्लेषण के माध्यम से स्मार्ट सिंचाई को सशक्त बनाना",
+      "Generated:": "तैयार किया गया:",
+      "System: Live Satellite Sync": "सिस्टम: लाइव सैटेलाइट सिंक",
+      "PRECISION TELEMETRY DIAGNOSTIC PROFILE": "परिशुद्ध टेलीमेट्री नैदानिक विवरण",
+      "Farm / Field ID:": "खेत / फ़ील्ड आईडी:",
+      "Region State:": "राज्य:",
+      "District Hub:": "जिला केंद्र:",
+      "Active Crop Profile:": "सक्रिय फसल विवरण:",
+      "Field Size Area:": "खेत का क्षेत्रफल:",
+      "Soil Profile Silt:": "मिट्टी का प्रकार:",
+      "NDVI Vegetation Index:": "NDVI वनस्पति सूचकांक:",
+      "Soil Moisture VWC:": "मिट्टी की नमी VWC:",
+      "Climate Conditions:": "जलवायु परिस्थितियां:",
+      "AI INTELLIGENCE DIAGNOSTIC DECISION": "एआई इंटेलिजेंस नैदानिक निर्णय",
+      "Crop Health Rating:": "फसल स्वास्थ्य रेटिंग:",
+      "AI Recommendation:": "एआई सुझाव:",
+      "Action Plan:": "कार्य योजना:",
+      "Expected Impact:": "अपेक्षित प्रभाव:",
+      "Scenario Calibration:": "परिदृश्य सारांश:",
+      "Water Saving Estimate:": "जल बचत अनुमान:",
+      "AgriX Geospatial Precision Irrigation Platform. Dynamically synchronized with Sentinel-2 datasets.": "AgriX भू-स्थानिक परिशुद्ध सिंचाई मंच। Sentinel-2 डेटासेट के साथ गतिशील रूप से सिंक्रनाइज़।",
+      "Version 4.2.0 (Stable-Prod)": "संस्करण 4.2.0 (स्थिर-उत्पाद)",
+      "Hectares": "हेक्टेयर",
+      "Alluvial Soil": "जलोढ़ मिट्टी",
+      "Clay Loam": "चिकनी मिट्टी",
+      "Sandy Loam": "रेतीली दोमट मिट्टी",
+      "Sandy Soil": "रेतीली मिट्टी",
+      "Laterite Soil": "लेटराइट मिट्टी",
+      "Red Soil": "लाल मिट्टी",
+      "Black Soil": "काली मिट्टी"
+    }
+    return isHi && translationsHi[key] ? translationsHi[key] : (defaultVal || key)
+  }
+
   const doc = new jsPDF()
   const img = new Image()
   img.src = logoImg
@@ -29,36 +67,36 @@ export const generatePDFReport = (data) => {
     doc.setTextColor(255, 255, 255)
     doc.setFontSize(9)
     doc.setFont('helvetica', 'normal')
-    doc.text('PRECISION WATER INTELLIGENCE REPORT', 50, 27)
-    doc.text('Empowering Smarter Irrigation Through AI, Geospatial & Predictive Analytics', 50, 33)
+    doc.text(tLabel('PRECISION WATER INTELLIGENCE REPORT'), 50, 27)
+    doc.text(tLabel('Empowering Smarter Irrigation Through AI, Geospatial & Predictive Analytics'), 50, 33)
 
     // Timestamp
     doc.setTextColor(148, 163, 184) // Slate-400
     doc.setFontSize(8)
     const timestampStr = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
-    doc.text(`Generated: ${timestampStr} (IST)`, 140, 20)
-    doc.text('System: Live Satellite Sync', 140, 25)
+    doc.text(`${tLabel('Generated:')} ${timestampStr} (IST)`, 140, 20)
+    doc.text(tLabel('System: Live Satellite Sync'), 140, 25)
 
     // 3. Document Details Section
     doc.setTextColor(5, 8, 22)
     doc.setFontSize(13)
     doc.setFont('helvetica', 'bold')
-    doc.text('PRECISION TELEMETRY DIAGNOSTIC PROFILE', 15, 60)
+    doc.text(tLabel('PRECISION TELEMETRY DIAGNOSTIC PROFILE'), 15, 60)
 
     doc.setDrawColor(226, 232, 240) // light gray
     doc.setLineWidth(0.5)
     doc.line(15, 64, 195, 64)
 
     const details = [
-      { label: 'Farm / Field ID:', value: data.farmId || data.id || 'N/A' },
-      { label: 'Region State:', value: data.state || 'N/A' },
-      { label: 'District Hub:', value: data.district || 'N/A' },
-      { label: 'Active Crop Profile:', value: data.crop || 'N/A' },
-      { label: 'Field Size Area:', value: `${data.area || 'N/A'} Hectares` },
-      { label: 'Soil Profile Silt:', value: data.soilType || 'Alluvial Soil' },
-      { label: 'NDVI Vegetation Index:', value: data.ndvi || '0.74' },
-      { label: 'Soil Moisture VWC:', value: data.moisture || 'N/A' },
-      { label: 'Climate Conditions:', value: data.weather || '32°C, Partly Cloudy' }
+      { label: tLabel('Farm / Field ID:'), value: data.farmId || data.id || 'N/A' },
+      { label: tLabel('Region State:'), value: data.state || 'N/A' },
+      { label: tLabel('District Hub:'), value: data.district || 'N/A' },
+      { label: tLabel('Active Crop Profile:'), value: data.crop || 'N/A' },
+      { label: tLabel('Field Size Area:'), value: `${data.area || 'N/A'} ${tLabel('Hectares')}` },
+      { label: tLabel('Soil Profile Silt:'), value: tLabel(data.soilType, data.soilType) },
+      { label: tLabel('NDVI Vegetation Index:'), value: data.ndvi || '0.74' },
+      { label: tLabel('Soil Moisture VWC:'), value: data.moisture || 'N/A' },
+      { label: tLabel('Climate Conditions:'), value: data.weather || '32°C, Partly Cloudy' }
     ]
 
     let y = 72
@@ -81,28 +119,34 @@ export const generatePDFReport = (data) => {
     doc.setFont('helvetica', 'bold')
     doc.setFontSize(12)
     doc.setTextColor(5, 8, 22)
-    doc.text('AI INTELLIGENCE DIAGNOSTIC DECISION', 15, y)
+    doc.text(tLabel('AI INTELLIGENCE DIAGNOSTIC DECISION'), 15, y)
     y += 8
 
     // Crop Health status string
     doc.setFont('helvetica', 'normal')
     doc.setFontSize(9)
     doc.setTextColor(71, 85, 105)
-    doc.text('Crop Health Rating:', 15, y)
+    doc.text(tLabel('Crop Health Rating:'), 15, y)
 
-    const healthStatus = (data.status || 'healthy').toUpperCase()
+    const healthStatusRaw = data.status || 'healthy'
+    const healthStatus = healthStatusRaw.toUpperCase()
     if (healthStatus === 'HEALTHY') doc.setTextColor(16, 185, 129)
     else if (healthStatus === 'MODERATE') doc.setTextColor(245, 158, 11)
     else doc.setTextColor(239, 68, 68)
     
+    let statusStr = healthStatus
+    if (isHi) {
+      statusStr = healthStatusRaw === 'healthy' ? 'स्वस्थ' : healthStatusRaw === 'moderate' ? 'मध्यम' : 'गंभीर'
+    }
+
     doc.setFont('helvetica', 'bold')
-    doc.text(healthStatus, 70, y)
+    doc.text(statusStr, 70, y)
     y += 8
 
     // AI recommendation text blocks
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(71, 85, 105)
-    doc.text('AI Recommendation:', 15, y)
+    doc.text(tLabel('AI Recommendation:'), 15, y)
     y += 5
     
     doc.setFont('helvetica', 'oblique')
@@ -121,7 +165,7 @@ export const generatePDFReport = (data) => {
     // Action Plan block
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(71, 85, 105)
-    doc.text('Action Plan:', 15, y)
+    doc.text(tLabel('Action Plan:'), 15, y)
     y += 5
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(51, 65, 85)
@@ -133,7 +177,7 @@ export const generatePDFReport = (data) => {
     // Expected Impact block
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(71, 85, 105)
-    doc.text('Expected Impact:', 15, y)
+    doc.text(tLabel('Expected Impact:'), 15, y)
     y += 5
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(51, 65, 85)
@@ -145,7 +189,7 @@ export const generatePDFReport = (data) => {
     // Scenario summary block
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(71, 85, 105)
-    doc.text('Scenario Calibration:', 15, y)
+    doc.text(tLabel('Scenario Calibration:'), 15, y)
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(51, 65, 85)
     doc.text(data.scenarioSummary || 'Standard historical climate dataset parameters.', 70, y)
@@ -154,7 +198,7 @@ export const generatePDFReport = (data) => {
     // Water Saving Estimate
     doc.setFont('helvetica', 'normal')
     doc.setTextColor(71, 85, 105)
-    doc.text('Water Saving Estimate:', 15, y)
+    doc.text(tLabel('Water Saving Estimate:'), 15, y)
     
     doc.setFont('helvetica', 'bold')
     doc.setTextColor(13, 148, 136) // Teal-600
@@ -168,8 +212,8 @@ export const generatePDFReport = (data) => {
     doc.setTextColor(148, 163, 184)
     doc.setFontSize(8)
     doc.setFont('helvetica', 'normal')
-    doc.text('AgriX Geospatial Precision Irrigation Platform. Dynamically synchronized with Sentinel-2 datasets.', 15, 282)
-    doc.text('Version 4.2.0 (Stable-Prod)', 160, 282)
+    doc.text(tLabel('AgriX Geospatial Precision Irrigation Platform. Dynamically synchronized with Sentinel-2 datasets.'), 15, 282)
+    doc.text(tLabel('Version 4.2.0 (Stable-Prod)'), 160, 282)
 
     doc.save(`AgriX-Telemetry-${data.farmId || data.id || 'Report'}.pdf`)
     window.dispatchEvent(new CustomEvent('farmNotification', { 
@@ -183,27 +227,28 @@ export const generatePDFReport = (data) => {
 }
 
 // Generate CSV Report
-export const generateCSVReport = (data) => {
+export const generateCSVReport = (data, lang = 'en') => {
   if (!data) return
 
+  const isHi = lang === 'hi'
   const rows = [
-    ["Parameter", "Value"],
-    ["Report ID", data.farmId || data.id || 'N/A'],
-    ["State", data.state || 'N/A'],
-    ["District", data.district || 'N/A'],
-    ["Crop Profile", data.crop || 'N/A'],
-    ["Field Area (ha)", data.area || 'N/A'],
-    ["Soil Profile Silt", data.soilType || 'Alluvial Soil'],
-    ["NDVI Index", data.ndvi || '0.74'],
-    ["Soil Moisture VWC", data.moisture || 'N/A'],
-    ["Climate Averages", data.weather || '32 C, Cloudy'],
-    ["AI Crop Rating", data.status || 'N/A'],
-    ["Water Saving Estimate", data.waterSaving || 'N/A'],
-    ["AI Recommendation", data.recommendation || 'N/A'],
-    ["Action Plan", data.actionPlan || 'N/A'],
-    ["Expected Impact", data.expectedImpact || 'N/A'],
-    ["Scenario Summary", data.scenarioSummary || 'N/A'],
-    ["Generated On", new Date().toLocaleString()]
+    [isHi ? "पैरामीटर" : "Parameter", isHi ? "मान" : "Value"],
+    [isHi ? "रिपोर्ट आईडी" : "Report ID", data.farmId || data.id || 'N/A'],
+    [isHi ? "राज्य" : "State", data.state || 'N/A'],
+    [isHi ? "जिला" : "District", data.district || 'N/A'],
+    [isHi ? "फसल विवरण" : "Crop Profile", data.crop || 'N/A'],
+    [isHi ? "खेत का क्षेत्रफल (हेक्टेयर)" : "Field Area (ha)", data.area || 'N/A'],
+    [isHi ? "मिट्टी का प्रकार" : "Soil Profile Silt", data.soilType || 'Alluvial Soil'],
+    [isHi ? "NDVI सूचकांक" : "NDVI Index", data.ndvi || '0.74'],
+    [isHi ? "मिट्टी की नमी VWC" : "Soil Moisture VWC", data.moisture || 'N/A'],
+    [isHi ? "जलवायु औसत" : "Climate Averages", data.weather || '32 C, Cloudy'],
+    [isHi ? "एआई फसल रेटिंग" : "AI Crop Rating", data.status || 'N/A'],
+    [isHi ? "जल बचत अनुमान" : "Water Saving Estimate", data.waterSaving || 'N/A'],
+    [isHi ? "एआई सुझाव" : "AI Recommendation", data.recommendation || 'N/A'],
+    [isHi ? "कार्य योजना" : "Action Plan", data.actionPlan || 'N/A'],
+    [isHi ? "अपेक्षित प्रभाव" : "Expected Impact", data.expectedImpact || 'N/A'],
+    [isHi ? "परिदृश्य सारांश" : "Scenario Summary", data.scenarioSummary || 'N/A'],
+    [isHi ? "तैयार किया गया तिथि" : "Generated On", new Date().toLocaleString()]
   ]
 
   const csvContent = "data:text/csv;charset=utf-8," 
@@ -226,9 +271,10 @@ export const generateCSVReport = (data) => {
 }
 
 // Trigger browser print layout for report profile
-export const printReport = (data) => {
+export const printReport = (data, lang = 'en') => {
   if (!data) return
 
+  const isHi = lang === 'hi'
   const printWindow = window.open('', '_blank')
   if (!printWindow) return
 
@@ -254,43 +300,43 @@ export const printReport = (data) => {
       <body>
         <div class="header">
           <div>
-            <div class="title">AgriX Precision Report</div>
-            <div class="subtitle">Spatial Decision Intelligence Platform</div>
+            <div class="title">${isHi ? 'AgriX परिशुद्ध रिपोर्ट' : 'AgriX Precision Report'}</div>
+            <div class="subtitle">${isHi ? 'स्थानिक निर्णय इंटेलिजेंस प्लेटफॉर्म' : 'Spatial Decision Intelligence Platform'}</div>
           </div>
           <div class="meta-info">
-            <div>Report ID: ${data.farmId || data.id}</div>
-            <div>Generated: ${new Date().toLocaleString()}</div>
+            <div>${isHi ? 'रिपोर्ट आईडी' : 'Report ID'}: ${data.farmId || data.id}</div>
+            <div>${isHi ? 'तैयार किया गया' : 'Generated'}: ${new Date().toLocaleString()}</div>
           </div>
         </div>
 
-        <div class="section-title">Telemetry Diagnostic Profile</div>
+        <div class="section-title">${isHi ? 'टेलीमेट्री नैदानिक विवरण' : 'Telemetry Diagnostic Profile'}</div>
         <table>
-          <tr><th>Farm / Field ID</th><td>${data.farmId || data.id}</td></tr>
-          <tr><th>Region State</th><td>${data.state || 'N/A'}</td></tr>
-          <tr><th>District Hub</th><td>${data.district || 'N/A'}</td></tr>
-          <tr><th>Active Crop Profile</th><td>${data.crop || 'N/A'}</td></tr>
-          <tr><th>Field Size Area</th><td>${data.area || 'N/A'} Hectares</td></tr>
-          <tr><th>Soil Profile Silt</th><td>${data.soilType || 'Alluvial Soil'}</td></tr>
-          <tr><th>NDVI Vegetation Index</th><td>${data.ndvi || '0.74'}</td></tr>
-          <tr><th>Soil Moisture VWC</th><td>${data.moisture || 'N/A'}</td></tr>
-          <tr><th>Climate Conditions</th><td>${data.weather || 'N/A'}</td></tr>
-          <tr><th>AI Crop Health Rating</th><td class="highlight">${data.status ? data.status.toUpperCase() : 'N/A'}</td></tr>
+          <tr><th>${isHi ? 'खेत / फ़ील्ड आईडी' : 'Farm / Field ID'}</th><td>${data.farmId || data.id}</td></tr>
+          <tr><th>${isHi ? 'राज्य' : 'Region State'}</th><td>${data.state || 'N/A'}</td></tr>
+          <tr><th>${isHi ? 'जिला केंद्र' : 'District Hub'}</th><td>${data.district || 'N/A'}</td></tr>
+          <tr><th>${isHi ? 'सक्रिय फसल विवरण' : 'Active Crop Profile'}</th><td>${data.crop || 'N/A'}</td></tr>
+          <tr><th>${isHi ? 'खेत का क्षेत्रफल' : 'Field Size Area'}</th><td>${data.area || 'N/A'} ${isHi ? 'हेक्टेयर' : 'Hectares'}</td></tr>
+          <tr><th>${isHi ? 'मिट्टी का प्रकार' : 'Soil Profile Silt'}</th><td>${data.soilType || 'Alluvial Soil'}</td></tr>
+          <tr><th>${isHi ? 'NDVI वनस्पति सूचकांक' : 'NDVI Vegetation Index'}</th><td>${data.ndvi || '0.74'}</td></tr>
+          <tr><th>${isHi ? 'मिट्टी की नमी VWC' : 'Soil Moisture VWC'}</th><td>${data.moisture || 'N/A'}</td></tr>
+          <tr><th>${isHi ? 'जलवायु परिस्थितियां' : 'Climate Conditions'}</th><td>${data.weather || 'N/A'}</td></tr>
+          <tr><th>${isHi ? 'एआई फसल स्वास्थ्य रेटिंग' : 'AI Crop Health Rating'}</th><td class="highlight">${isHi ? (data.status === 'healthy' ? 'स्वस्थ' : data.status === 'moderate' ? 'मध्यम' : 'गंभीर') : (data.status ? data.status.toUpperCase() : 'N/A')}</td></tr>
         </table>
 
-        <div class="section-title">AI Diagnostic Decision</div>
+        <div class="section-title">${isHi ? 'एआई नैदानिक निर्णय' : 'AI Diagnostic Decision'}</div>
         <div class="recommendation-box">
-          <strong>AI Recommendation:</strong> ${data.recommendation || 'N/A'}
+          <strong>${isHi ? 'एआई सुझाव' : 'AI Recommendation'}:</strong> ${data.recommendation || 'N/A'}
         </div>
 
         <div style="margin-top: 15px; font-size: 13px;">
-          <p><strong>Action Plan:</strong> ${data.actionPlan || 'N/A'}</p>
-          <p><strong>Expected Impact:</strong> ${data.expectedImpact || 'N/A'}</p>
-          <p><strong>Scenario Summary:</strong> ${data.scenarioSummary || 'N/A'}</p>
-          <p><strong>Water Saving Estimate:</strong> <span class="highlight">${data.waterSaving || 'N/A'}</span></p>
+          <p><strong>${isHi ? 'कार्य योजना' : 'Action Plan'}:</strong> ${data.actionPlan || 'N/A'}</p>
+          <p><strong>${isHi ? 'अपेक्षित प्रभाव' : 'Expected Impact'}:</strong> ${data.expectedImpact || 'N/A'}</p>
+          <p><strong>${isHi ? 'परिदृश्य सारांश' : 'Scenario Summary'}:</strong> ${data.scenarioSummary || 'N/A'}</p>
+          <p><strong>${isHi ? 'जल बचत अनुमान' : 'Water Saving Estimate'}:</strong> <span class="highlight">${data.waterSaving || 'N/A'}</span></p>
         </div>
 
         <div class="footer">
-          AgriX Geospatial Precision Platform. This document is dynamically synchronized with Sentinel-2 datasets. Version 4.2.0 (Stable-Prod).
+          ${isHi ? 'AgriX भू-स्थानिक परिशुद्ध मंच। यह दस्तावेज़ गतिशील रूप से Sentinel-2 डेटासेट के साथ सिंक्रनाइज़ है। संस्करण 4.2.0 (स्थिर-उत्पाद)।' : 'AgriX Geospatial Precision Platform. This document is dynamically synchronized with Sentinel-2 datasets. Version 4.2.0 (Stable-Prod).'}
         </div>
       </body>
     </html>

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { Bell, Menu, Check, Trash2, Sprout } from 'lucide-react'
 import TransparentLogo from '../components/common/TransparentLogo'
 import logoImg from '../assets/logo.png'
+import { useLanguage } from '../context/LanguageContext'
 
 const Header = ({ isCollapsed, setMobileOpen, mobileOpen, user = { name: "Farm Administrator", role: "Administrator" } }) => {
+  const { language, setLanguage, t } = useLanguage()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [notifications, setNotifications] = useState([
     {
@@ -134,6 +136,28 @@ const Header = ({ isCollapsed, setMobileOpen, mobileOpen, user = { name: "Farm A
       {/* Right: Notifications & Profile Action Panel */}
       <div className="flex items-center gap-4 relative">
         
+        {/* Glassmorphism Language Selector Toggle */}
+        <div className="flex items-center gap-1.5 p-1 rounded-xl border border-white/5 bg-white/3 text-[10px] md:text-xs font-black tracking-wide text-slate-300">
+          <span className="pl-1 text-slate-400">🌐</span>
+          <button 
+            onClick={() => setLanguage('en')}
+            className={`px-2 py-1 rounded-lg transition-all duration-200 cursor-pointer
+              ${language === 'en' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/10 shadow-[0_0_10px_rgba(16,185,129,0.15)] font-bold' : 'hover:bg-white/5 hover:text-slate-100'}
+            `}
+          >
+            English
+          </button>
+          <span className="text-white/10">|</span>
+          <button 
+            onClick={() => setLanguage('hi')}
+            className={`px-2 py-1 rounded-lg transition-all duration-200 cursor-pointer
+              ${language === 'hi' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/10 shadow-[0_0_10px_rgba(16,185,129,0.15)] font-bold' : 'hover:bg-white/5 hover:text-slate-100'}
+            `}
+          >
+            हिन्दी
+          </button>
+        </div>
+
         {/* Interactive Notification Bell */}
         <div className="relative">
           <button 
@@ -162,21 +186,21 @@ const Header = ({ isCollapsed, setMobileOpen, mobileOpen, user = { name: "Farm A
                 {/* Dropdown Header */}
                 <div className="p-4 border-b border-white/5 flex items-center justify-between">
                   <div>
-                    <h4 className="text-xs font-black uppercase tracking-wider text-slate-100">Agricultural Alerts</h4>
-                    <p className="text-[9px] text-slate-500 font-bold font-mono mt-0.5">{unreadCount} unread diagnostic items</p>
+                    <h4 className="text-xs font-black uppercase tracking-wider text-slate-100">{t("Agricultural Alerts")}</h4>
+                    <p className="text-[9px] text-slate-500 font-bold font-mono mt-0.5">{unreadCount} {t("unread diagnostic items")}</p>
                   </div>
                   <div className="flex gap-2">
                     <button 
                       onClick={markAllAsRead} 
                       className="p-1.5 rounded-lg border border-white/5 bg-white/2 hover:bg-white/5 text-[10px] text-slate-400 hover:text-slate-200 transition-colors"
-                      title="Mark all as read"
+                      title={t("Mark all as read")}
                     >
                       <Check className="h-3.5 w-3.5" />
                     </button>
                     <button 
                       onClick={clearNotifications}
                       className="p-1.5 rounded-lg border border-white/5 bg-white/2 hover:bg-[#ef4444]/10 text-[10px] text-slate-400 hover:text-rose-400 transition-colors"
-                      title="Clear notifications"
+                      title={t("Clear")}
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
@@ -188,7 +212,7 @@ const Header = ({ isCollapsed, setMobileOpen, mobileOpen, user = { name: "Farm A
                   {notifications.length === 0 ? (
                     <div className="p-8 text-center text-slate-500 text-xs flex flex-col items-center justify-center gap-2">
                       <Sprout className="h-8 w-8 text-slate-600 animate-pulse" />
-                      <p>No agricultural notifications active</p>
+                      <p>{t("No agricultural notifications active")}</p>
                     </div>
                   ) : (
                     notifications.map((item, idx) => {

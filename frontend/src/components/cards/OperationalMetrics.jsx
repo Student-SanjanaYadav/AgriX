@@ -1,8 +1,10 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Droplet, ToggleLeft, Video, CheckCircle } from 'lucide-react'
+import { useLanguage } from '../../context/LanguageContext'
 
 const OperationalMetrics = ({ selectedFarm }) => {
+  const { t } = useLanguage()
   // Global defaults
   const defaultMetrics = [
     {
@@ -166,9 +168,11 @@ const OperationalMetrics = ({ selectedFarm }) => {
             className="p-3.5 rounded-xl border border-white/5 bg-white/2 backdrop-blur-md flex items-center justify-between gap-4 cursor-default select-none hover:bg-white/4 hover:border-white/10 transition-all duration-200"
           >
             <div className="space-y-1.5 flex-1 min-w-0">
-              <span className="text-[11px] text-slate-500 uppercase font-black tracking-wider block mb-1">{metric.label}</span>
-              <p className="text-base font-black text-slate-100 leading-tight">{metric.value}</p>
-              <p className="text-xs text-slate-400 font-semibold truncate max-w-[130px]">{metric.subtext}</p>
+              <span className="text-[11px] text-slate-500 uppercase font-black tracking-wider block mb-1">
+                {t(metric.id === 'saturation' ? 'Saturation Index' : metric.id === 'valve' ? 'Valve Status' : metric.id === 'coverage' ? 'Satellite Coverage' : metric.id === 'sensors' ? 'Sensors Status' : metric.label)}
+              </span>
+              <p className="text-base font-black text-slate-100 leading-tight">{t(metric.value)}</p>
+              <p className="text-xs text-slate-400 font-semibold truncate max-w-[130px]">{t(metric.subtext)}</p>
             </div>
             <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/5 ${metric.iconColor}`}>
               <Icon className="h-4 w-4" />

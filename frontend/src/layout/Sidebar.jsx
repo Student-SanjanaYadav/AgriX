@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link, NavLink, useLocation } from 'react-router-dom'
+import { useLanguage } from '../context/LanguageContext'
 import { 
   LayoutDashboard, 
   TrendingUp, 
@@ -16,6 +17,7 @@ import TransparentLogo from '../components/common/TransparentLogo'
 import logoImg from '../assets/logo.png'
 
 const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen }) => {
+  const { t } = useLanguage()
   const menuItems = [
     { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
     { name: 'Analytics', icon: TrendingUp, path: '/analytics' },
@@ -137,7 +139,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen }) => 
                 {/* Menu Text */}
                 {!isCollapsed && (
                   <span className="font-medium text-sm tracking-wide transition-opacity duration-200">
-                    {item.name}
+                    {t(item.name)}
                   </span>
                 )}
 
@@ -145,7 +147,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen }) => 
                 {isCollapsed && (
                   <div className="absolute left-20 scale-0 group-hover:scale-100 transition-all duration-200 origin-left z-50">
                     <div className="bg-[#0b0f2a] border border-white/10 px-3 py-1.5 rounded-lg shadow-xl">
-                      <p className="text-xs font-semibold text-slate-200 whitespace-nowrap">{item.name}</p>
+                      <p className="text-xs font-semibold text-slate-200 whitespace-nowrap">{t(item.name)}</p>
                     </div>
                   </div>
                 )}
@@ -165,7 +167,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen }) => 
             ) : (
               <div className="flex items-center gap-2">
                 <ChevronLeft className="h-5 w-5" />
-                <span className="text-xs font-semibold tracking-wider uppercase">Collapse</span>
+                <span className="text-xs font-semibold tracking-wider uppercase">{t("Collapse")}</span>
               </div>
             )}
           </button>

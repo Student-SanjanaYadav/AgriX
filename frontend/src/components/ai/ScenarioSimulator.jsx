@@ -7,18 +7,20 @@ import {
   Gauge
 } from 'lucide-react'
 import { generateRecommendation } from '../../services/recommendationEngine'
+import { useLanguage } from '../../context/LanguageContext'
 
 const ScenarioSimulator = ({ selectedFarm, metrics }) => {
+  const { t } = useLanguage()
   const [activeScenario, setActiveScenario] = useState(null)
   const [simulatedMetrics, setSimulatedMetrics] = useState(null)
   const [isSimulating, setIsSimulating] = useState(false)
 
   const scenarios = [
-    { id: 1, name: 'Rain Delayed 24h', desc: 'Sets rain forecast probability to 0% due to weather front shift.' },
-    { id: 2, name: 'Temperature +3°C', desc: 'Simulates microclimate thermal stress adding 3°C.' },
-    { id: 3, name: 'Moisture Decreases 10%', desc: 'Simulates soil VWC moisture dropping by 10%.' },
-    { id: 4, name: 'Water Supply Reduced 20%', desc: 'Forces dry irrigation channel flow, raising crop stress.' },
-    { id: 5, name: 'Heavy Rainfall Tomorrow', desc: 'Forecasts 90% rain probability tomorrow.' }
+    { id: 1, name: t('Rain Delayed 24h'), desc: t('Sets rain forecast probability to 0% due to weather front shift.') },
+    { id: 2, name: t('Temperature +3°C'), desc: t('Simulates microclimate thermal stress adding 3°C.') },
+    { id: 3, name: t('Moisture Decreases 10%'), desc: t('Simulates soil VWC moisture dropping by 10%.') },
+    { id: 4, name: t('Water Supply Reduced 20%'), desc: t('Forces dry irrigation channel flow, raising crop stress.') },
+    { id: 5, name: t('Heavy Rainfall Tomorrow'), desc: t('Forecasts 90% rain probability tomorrow.') }
   ]
 
   // Recalculate recommendation metrics based on scenario parameters
@@ -115,9 +117,9 @@ const ScenarioSimulator = ({ selectedFarm, metrics }) => {
           <Gauge className="h-7 w-7" />
         </motion.div>
         
-        <h3 className="text-slate-200 font-bold text-xs tracking-wide font-sans">Awaiting Field Simulation</h3>
+        <h3 className="text-slate-200 font-bold text-xs tracking-wide font-sans">{t("Awaiting Field Simulation")}</h3>
         <p className="text-[11px] text-slate-500 max-w-xs mt-2 leading-relaxed">
-          Select an active field target on the geospatial map to boot environmental scenario simulation tools.
+          {t("Select an active field target on the geospatial map to boot environmental scenario simulation tools.")}
         </p>
       </div>
     )
@@ -135,7 +137,7 @@ const ScenarioSimulator = ({ selectedFarm, metrics }) => {
             <Gauge className="h-4 w-4" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-100 text-xs uppercase tracking-wider font-sans">Scenario Simulator</h3>
+            <h3 className="font-bold text-slate-100 text-xs uppercase tracking-wider font-sans">{t("Scenario Simulator")}</h3>
             <p className="text-[9px] text-slate-500 font-semibold font-mono">Tuning Target: {selectedFarm.id}</p>
           </div>
         </div>
@@ -145,7 +147,7 @@ const ScenarioSimulator = ({ selectedFarm, metrics }) => {
             onClick={handleReset}
             className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border border-purple-500/20 bg-purple-500/5 hover:bg-purple-500/10 text-[9px] font-black uppercase text-purple-400 hover:text-purple-300 transition-all cursor-pointer"
           >
-            <RotateCcw className="h-3 w-3" /> Reset Engine
+            <RotateCcw className="h-3 w-3" /> {t("Reset Engine")}
           </button>
         )}
       </div>
@@ -193,7 +195,7 @@ const ScenarioSimulator = ({ selectedFarm, metrics }) => {
                 className="flex-1 flex flex-col items-center justify-center py-10"
               >
                 <Activity className="h-6 w-6 text-purple-400 animate-pulse mb-2" />
-                <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Recalculating AI Models...</span>
+                <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">{t("Recalculating AI Models...")}</span>
               </motion.div>
             ) : (
               /* Simulation output review details */
@@ -207,7 +209,7 @@ const ScenarioSimulator = ({ selectedFarm, metrics }) => {
                 {/* Header indicators */}
                 <div className="flex items-center justify-between border-b border-white/5 pb-2">
                   <span className="text-[9.5px] font-black uppercase text-purple-400 tracking-wider">
-                    {activeScenario !== null ? 'Simulated Inference' : 'Default Inference'}
+                    {activeScenario !== null ? t('Simulated Inference') : t('Default Inference')}
                   </span>
                   
                   <span className={`text-[8.5px] font-black uppercase px-2 py-0.5 rounded border
@@ -215,14 +217,14 @@ const ScenarioSimulator = ({ selectedFarm, metrics }) => {
                     ${activeMetrics.priority === 'Medium' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : ''}
                     ${activeMetrics.priority === 'Normal' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : ''}
                   `}>
-                    {activeMetrics.priority} Priority
+                    {t(activeMetrics.priority)} {t("Priority")}
                   </span>
                 </div>
 
                 {/* Primary Stats Grid */}
                 <div className="grid grid-cols-2 gap-2 text-xs font-semibold text-slate-400">
                   <div className="p-2 rounded bg-white/2 border border-white/2 flex justify-between items-center">
-                    <span>Health Score:</span>
+                    <span>{t("Health Score")}:</span>
                     <span className={`font-mono font-bold text-slate-100 flex items-center gap-1
                       ${activeScenario !== null && parseFloat(activeMetrics.healthScore) !== parseFloat(metrics.healthScore) ? 'text-amber-400 font-extrabold' : ''}
                     `}>
@@ -234,7 +236,7 @@ const ScenarioSimulator = ({ selectedFarm, metrics }) => {
                   </div>
 
                   <div className="p-2 rounded bg-white/2 border border-white/2 flex justify-between items-center">
-                    <span>Yield prediction:</span>
+                    <span>{t("Yield prediction:")}</span>
                     <span className={`font-mono font-bold text-slate-100
                       ${activeScenario !== null && activeMetrics.yieldPrediction !== metrics.yieldPrediction ? 'text-amber-400 font-extrabold' : ''}
                     `}>
@@ -245,7 +247,7 @@ const ScenarioSimulator = ({ selectedFarm, metrics }) => {
 
                 {/* Simulated Recommendation text */}
                 <div className="p-2.5 rounded-lg border border-purple-500/10 bg-purple-500/2 text-left space-y-0.5">
-                  <span className="text-[8.5px] text-purple-400 font-black uppercase tracking-wider block">Simulated Recommendation</span>
+                  <span className="text-[8.5px] text-purple-400 font-black uppercase tracking-wider block">{t("AI Recommendation")}</span>
                   <p className="text-[11px] text-slate-200 font-semibold leading-relaxed">
                     {activeMetrics.recommendation}
                   </p>
@@ -253,7 +255,7 @@ const ScenarioSimulator = ({ selectedFarm, metrics }) => {
 
                 {/* Simulated Action Plan text */}
                 <div className="space-y-1">
-                  <span className="text-[8.5px] text-slate-500 font-black uppercase tracking-wider block">Action Plan</span>
+                  <span className="text-[8.5px] text-slate-500 font-black uppercase tracking-wider block">{t("Action Plan")}</span>
                   <p className="text-[10px] text-slate-400 leading-normal">
                     {activeMetrics.actionPlan}
                   </p>
@@ -261,10 +263,10 @@ const ScenarioSimulator = ({ selectedFarm, metrics }) => {
 
                 {/* Water and Cost Savings parameters */}
                 <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/5 text-[10px] text-slate-400 font-semibold select-none">
-                  <div>Water Saved: <span className="font-mono font-bold text-slate-200">{activeMetrics.waterSaving}</span></div>
-                  <div>Cost Saved: <span className="font-mono font-bold text-emerald-400">{activeMetrics.costSaving}</span></div>
-                  <div>Risk rating: <span className={`font-bold capitalize ${activeMetrics.risk === 'High' ? 'text-rose-400' : activeMetrics.risk === 'Moderate' ? 'text-amber-400' : 'text-emerald-400'}`}>{activeMetrics.risk}</span></div>
-                  <div>AI Confidence: <span className="font-mono font-bold text-slate-200">{activeMetrics.confidence}%</span></div>
+                  <div>{t("Water Saved:")} <span className="font-mono font-bold text-slate-200">{activeMetrics.waterSaving}</span></div>
+                  <div>{t("Cost Saved:")} <span className="font-mono font-bold text-emerald-400">{activeMetrics.costSaving}</span></div>
+                  <div>{t("Risk rating:")} <span className={`font-bold capitalize ${activeMetrics.risk === 'High' ? 'text-rose-400' : activeMetrics.risk === 'Moderate' ? 'text-amber-400' : 'text-emerald-400'}`}>{t(activeMetrics.risk)}</span></div>
+                  <div>{t("AI Confidence:")} <span className="font-mono font-bold text-slate-200">{activeMetrics.confidence}%</span></div>
                 </div>
               </motion.div>
             )}

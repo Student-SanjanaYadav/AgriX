@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useLanguage } from '../context/LanguageContext'
 import { 
   FileText, 
   Download, 
@@ -17,6 +18,7 @@ import {
 import { generatePDFReport, generateCSVReport, printReport } from '../services/reportService'
 
 const Reports = () => {
+  const { t, language } = useLanguage()
   const [selectedFarm, setSelectedFarm] = useState(null)
   const [metrics, setMetrics] = useState(null)
 
@@ -167,10 +169,10 @@ const Reports = () => {
                 actionPlan: metrics.actionPlan,
                 expectedImpact: metrics.expectedImpact,
                 scenarioSummary: `${metrics.priority} Priority status override`
-              })}
+              }, language)}
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 text-[#050816] font-bold shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:bg-emerald-400 transition-all cursor-pointer text-xs"
             >
-              <Download className="h-4 w-4" /> PDF Report
+              <Download className="h-4 w-4" /> {t("Download PDF")}
             </button>
 
             {/* CSV export */}
@@ -191,10 +193,10 @@ const Reports = () => {
                 actionPlan: metrics.actionPlan,
                 expectedImpact: metrics.expectedImpact,
                 scenarioSummary: `${metrics.priority} Priority status override`
-              })}
+              }, language)}
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-200 font-bold hover:bg-white/10 transition-all cursor-pointer text-xs"
             >
-              <Table className="h-4 w-4 text-cyan-400" /> CSV Sheet
+              <Table className="h-4 w-4 text-cyan-400" /> {t("Download CSV")}
             </button>
 
             {/* Browser print */}
@@ -215,10 +217,10 @@ const Reports = () => {
                 actionPlan: metrics.actionPlan,
                 expectedImpact: metrics.expectedImpact,
                 scenarioSummary: `${metrics.priority} Priority status override`
-              })}
+              }, language)}
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-200 font-bold hover:bg-white/10 transition-all cursor-pointer text-xs"
             >
-              <Printer className="h-4 w-4 text-blue-400" /> Print Summary
+              <Printer className="h-4 w-4 text-blue-400" /> {t("Print")}
             </button>
           </div>
         </motion.div>

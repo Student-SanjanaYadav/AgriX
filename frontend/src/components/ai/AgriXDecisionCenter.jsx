@@ -7,8 +7,10 @@ import {
   XCircle,
   Activity
 } from 'lucide-react'
+import { useLanguage } from '../../context/LanguageContext'
 
 const AgriXDecisionCenter = ({ selectedFarm, metrics, loading, progress }) => {
+  const { t } = useLanguage()
   const [activeTab, setActiveTab] = useState('overview')
 
   if (!selectedFarm) {
@@ -86,7 +88,7 @@ const AgriXDecisionCenter = ({ selectedFarm, metrics, loading, progress }) => {
                     <BrainCircuit className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="font-black text-slate-100 text-sm tracking-wider uppercase font-sans">AgriX Decision Center</h3>
+                    <h3 className="font-black text-slate-100 text-sm tracking-wider uppercase font-sans">{t("AgriX Decision Center")}</h3>
                     <p className="text-[10px] text-slate-500 font-bold font-mono">Target: {selectedFarm?.id ?? 'N/A'}</p>
                   </div>
                 </div>
@@ -96,7 +98,7 @@ const AgriXDecisionCenter = ({ selectedFarm, metrics, loading, progress }) => {
                   ${metrics?.priority === 'Medium' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : ''}
                   ${metrics?.priority === 'Normal' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : ''}
                 `}>
-                  ● {metrics?.priority ?? 'Normal'} Priority
+                  ● {t(metrics?.priority ?? 'Normal')} {t("Priority")}
                 </span>
               </div>
 
@@ -113,7 +115,7 @@ const AgriXDecisionCenter = ({ selectedFarm, metrics, loading, progress }) => {
                       }
                     `}
                   >
-                    {tab}
+                    {t(tab.charAt(0).toUpperCase() + tab.slice(1))}
                   </button>
                 ))}
               </div>
@@ -132,42 +134,42 @@ const AgriXDecisionCenter = ({ selectedFarm, metrics, loading, progress }) => {
                       className="space-y-4"
                     >
                       <div className="space-y-2">
-                        <span className="text-[11px] text-slate-500 font-black uppercase tracking-wider block mb-1">Selected Field Summary</span>
+                        <span className="text-[11px] text-slate-500 font-black uppercase tracking-wider block mb-1">{t("Selected Field Summary")}</span>
                         <div className="grid grid-cols-2 gap-3 text-xs font-semibold text-slate-400">
                           <div className="p-3 rounded-xl bg-white/2 border border-white/5 flex justify-between items-center">
-                            <span>Field Target:</span>
+                            <span>{t("Field Target:")}</span>
                             <span className="text-slate-200 font-mono text-sm font-bold">{selectedFarm?.id ?? 'N/A'}</span>
                           </div>
                           <div className="p-3 rounded-xl bg-white/2 border border-white/5 flex justify-between items-center">
-                            <span>Crop Stage:</span>
+                            <span>{t("Crop Stage:")}</span>
                             <span className="text-slate-200 text-sm font-bold">{selectedFarm?.growthStage ?? metrics?.growthStage ?? 'Vegetative'}</span>
                           </div>
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <span className="text-[11px] text-slate-500 font-black uppercase tracking-wider block mb-1">Current Field Status</span>
+                        <span className="text-[11px] text-slate-500 font-black uppercase tracking-wider block mb-1">{t("Current Field Status")}</span>
                         <div className="grid grid-cols-2 gap-3 text-xs font-semibold text-slate-400">
                           <div className="p-3 rounded-xl bg-white/2 border border-white/5 flex justify-between items-center">
-                            <span>Moisture level:</span>
+                            <span>{t("Moisture level:")}</span>
                             <span className="text-slate-200 font-mono text-sm font-bold">{selectedFarm?.moisture ?? '0%'}</span>
                           </div>
                           <div className="p-3 rounded-xl bg-white/2 border border-white/5 flex justify-between items-center">
-                            <span>NDVI reflectance:</span>
+                            <span>{t("NDVI reflectance:")}</span>
                             <span className="text-slate-200 font-mono text-sm font-bold">{selectedFarm?.ndvi ?? '0.74'}</span>
                           </div>
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <span className="text-[11px] text-slate-500 font-black uppercase tracking-wider block mb-1">Operational Status</span>
+                        <span className="text-[11px] text-slate-500 font-black uppercase tracking-wider block mb-1">{t("Operational Status")}</span>
                         <div className="grid grid-cols-2 gap-3 text-xs font-semibold text-slate-400">
                           <div className="p-3 rounded-xl bg-white/2 border border-white/5 flex justify-between items-center">
-                            <span>Soil Silt profile:</span>
+                            <span>{t("Soil Silt profile:")}</span>
                             <span className="text-slate-200 text-sm font-bold">{selectedFarm?.soilType ?? metrics?.soilType ?? 'Alluvial'}</span>
                           </div>
                           <div className="p-3 rounded-xl bg-white/2 border border-white/5 flex justify-between items-center">
-                            <span>Last Irrigation:</span>
+                            <span>{t("Last Irrigation:")}</span>
                             <span className="text-slate-200 text-sm font-bold">{selectedFarm?.lastIrrigation ?? metrics?.lastIrrigation ?? '12h ago'}</span>
                           </div>
                         </div>
@@ -205,26 +207,26 @@ const AgriXDecisionCenter = ({ selectedFarm, metrics, loading, progress }) => {
                           <span className="absolute text-xs font-black text-slate-100 font-mono">{metrics?.confidence ?? 95}%</span>
                         </div>
                         <div className="text-left space-y-0.5">
-                          <h4 className="font-bold text-slate-200 text-xs">AI Inference Confidence</h4>
+                          <h4 className="font-bold text-slate-200 text-xs">{t("AI Inference Confidence")}</h4>
                           <p className="text-[10px] text-slate-500 max-w-xs leading-normal">
-                            Calculated using Sentinel-2 reflectance indices coupled with active edge soil hygrometer telemetry.
+                            {t("Calculated using Sentinel-2 reflectance indices coupled with active edge soil hygrometer telemetry.")}
                           </p>
                         </div>
                       </div>
 
                       <div className="grid grid-cols-2 gap-3 text-xs font-semibold text-slate-400">
                         <div className="p-3 rounded-xl bg-white/2 border border-white/5 flex justify-between items-center">
-                          <span>Health Score:</span>
+                          <span>{t("Health Score")}:</span>
                           <span className="text-slate-200 font-bold font-mono text-sm">{metrics?.healthScore ?? 75}/100</span>
                         </div>
                         <div className="p-3 rounded-xl bg-white/2 border border-white/5 flex justify-between items-center">
-                          <span>Risk Profile:</span>
+                          <span>{t("Risk Profile")}:</span>
                           <span className={`font-black uppercase tracking-wider text-[9px] px-2 py-0.5 rounded border
                             ${metrics?.risk === 'High' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : ''}
                             ${metrics?.risk === 'Moderate' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : ''}
                             ${metrics?.risk === 'Low' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : ''}
                           `}>
-                            {metrics?.risk ?? 'Low'}
+                            {t(metrics?.risk ?? 'Low')}
                           </span>
                         </div>
                       </div>
@@ -241,7 +243,7 @@ const AgriXDecisionCenter = ({ selectedFarm, metrics, loading, progress }) => {
                       className="space-y-4"
                     >
                       <div className="p-4 rounded-xl border border-emerald-500/15 bg-emerald-500/2 space-y-1">
-                        <span className="text-[9px] text-emerald-400 font-black uppercase tracking-wider block">AI Irrigation Recommendation</span>
+                        <span className="text-[9px] text-emerald-400 font-black uppercase tracking-wider block">{t("AI Irrigation Recommendation")}</span>
                         <p className="text-[13px] text-slate-200 font-bold leading-relaxed">
                           {metrics?.recommendation ?? 'No recommendation logged.'}
                         </p>
@@ -249,7 +251,7 @@ const AgriXDecisionCenter = ({ selectedFarm, metrics, loading, progress }) => {
 
                       {/* Explainability checkpoints */}
                       <div className="space-y-2">
-                        <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider block">Explainability ("Why?")</span>
+                        <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider block">{t("Explainability (\"Why?\")")}</span>
                         <div className="grid grid-cols-2 gap-2 text-[11px] font-bold text-slate-400">
                           {(metrics?.explanation || []).map((item, idx) => (
                             <div key={idx} className="flex items-center gap-1.5 p-2 rounded bg-white/1 border border-white/3">
@@ -271,11 +273,11 @@ const AgriXDecisionCenter = ({ selectedFarm, metrics, loading, progress }) => {
                       {/* Action Plan & Expected Impact */}
                       <div className="p-3.5 rounded-xl border border-white/5 bg-white/2 space-y-2.5">
                         <div className="space-y-0.5">
-                          <span className="text-[9px] text-slate-500 font-black uppercase tracking-wider block">Action Plan</span>
+                          <span className="text-[9px] text-slate-500 font-black uppercase tracking-wider block">{t("Action Plan")}</span>
                           <p className="text-[11px] text-slate-300 leading-normal">{metrics?.actionPlan ?? 'Standby'}</p>
                         </div>
                         <div className="space-y-0.5">
-                          <span className="text-[9px] text-slate-500 font-black uppercase tracking-wider block">Expected Impact</span>
+                          <span className="text-[9px] text-slate-500 font-black uppercase tracking-wider block">{t("Expected Impact")}</span>
                           <p className="text-[11px] text-slate-300 leading-normal">{metrics?.expectedImpact ?? 'No impact logged.'}</p>
                         </div>
                       </div>
@@ -283,11 +285,11 @@ const AgriXDecisionCenter = ({ selectedFarm, metrics, loading, progress }) => {
                       {/* Water & Cost Savings */}
                       <div className="text-xs font-semibold text-slate-400 pt-2 border-t border-white/5 flex flex-col gap-1 select-none">
                         <div className="flex justify-between">
-                          <span>Estimated Water Saving:</span>
+                          <span>{t("Water Saving")}:</span>
                           <span className="text-teal-400 font-black font-mono">{metrics?.waterSaving ?? '0 Litres'}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>Estimated Cost Saving:</span>
+                          <span>{t("Cost Saving")}:</span>
                           <span className="text-emerald-400 font-black font-mono">{metrics?.costSaving ?? '₹0 Saved'}</span>
                         </div>
                       </div>
@@ -303,7 +305,7 @@ const AgriXDecisionCenter = ({ selectedFarm, metrics, loading, progress }) => {
                       exit={{ opacity: 0, x: -5 }}
                       className="space-y-3"
                     >
-                      <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">Local Field Diagnostics Log</span>
+                      <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider block">{t("Local Field Diagnostics Log")}</span>
                       <div className="space-y-2">
                         {(metrics?.localHistory || []).map((log) => (
                           <div 
@@ -336,29 +338,29 @@ const AgriXDecisionCenter = ({ selectedFarm, metrics, loading, progress }) => {
               {/* Bottom Operational Status details footer */}
               <div className="grid grid-cols-4 gap-2 pt-4 border-t border-white/5 select-none mt-3">
                 <div className="text-center">
-                  <p className="text-[8.5px] text-slate-500 font-black uppercase tracking-wider">Sat Index</p>
+                  <p className="text-[8.5px] text-slate-500 font-black uppercase tracking-wider">{t("Sat Index")}</p>
                   <p className="text-[11px] font-black font-mono mt-0.5 text-slate-200">
                     {metrics?.saturationIndex ?? selectedFarm?.moisture ?? '0%'}
                   </p>
                 </div>
                 <div className="text-center border-l border-white/5">
-                  <p className="text-[8.5px] text-slate-500 font-black uppercase tracking-wider">Valve Status</p>
+                  <p className="text-[8.5px] text-slate-500 font-black uppercase tracking-wider">{t("Valve Status")}</p>
                   <p className="text-[10px] font-black text-cyan-400 mt-0.5 truncate px-0.5 uppercase tracking-wide">
-                    {(metrics?.valveStatus || 'Closed')?.split(' ')?.[0] || 'Closed'}
+                    {t((metrics?.valveStatus || 'Closed')?.split(' ')?.[0] || 'Closed')}
                   </p>
                 </div>
                 <div className="text-center border-l border-white/5">
-                  <p className="text-[8.5px] text-slate-500 font-black uppercase tracking-wider">Sensor Net</p>
+                  <p className="text-[8.5px] text-slate-500 font-black uppercase tracking-wider">{t("Sensor Net")}</p>
                   <p className="text-[10px] font-black text-slate-300 mt-0.5 truncate px-0.5 uppercase tracking-wide">
                     {(metrics?.sensorNetwork || '98% Active')?.split(' ')?.[0] || '100%'}
                   </p>
                 </div>
                 <div className="text-center border-l border-white/5">
-                  <p className="text-[8.5px] text-slate-500 font-black uppercase tracking-wider">Water Stress</p>
+                  <p className="text-[8.5px] text-slate-500 font-black uppercase tracking-wider">{t("Water Stress")}</p>
                   <p className={`text-[10px] font-black mt-0.5 truncate px-0.5 uppercase tracking-wide
                     ${(metrics?.waterStress || 'Low')?.includes('Optimal') ? 'text-emerald-400' : (metrics?.waterStress || 'Low')?.includes('Moderate') ? 'text-amber-400' : 'text-rose-400'}
                   `}>
-                    {(metrics?.waterStress || 'Low')?.split(' ')?.[0] || 'Low'}
+                    {t((metrics?.waterStress || 'Low')?.split(' ')?.[0] || 'Low')}
                   </p>
                 </div>
               </div>

@@ -1,8 +1,10 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Leaf, Droplets, Grid, Activity } from 'lucide-react'
+import { useLanguage } from '../../context/LanguageContext'
 
 const KPICards = ({ selectedFarm }) => {
+  const { t } = useLanguage()
   // Global aggregate averages (Default State)
   const defaultKPIs = [
     {
@@ -128,7 +130,9 @@ const KPICards = ({ selectedFarm }) => {
           >
             {/* KPI Details */}
             <div className="space-y-2 text-left flex-1 min-w-0 mr-3">
-              <span className="text-xs text-slate-400 uppercase font-black tracking-wider block mb-1">{kpi.label}</span>
+              <span className="text-xs text-slate-400 uppercase font-black tracking-wider block mb-1">
+                {t(kpi.id === 'crop' ? 'Active Crop' : kpi.id === 'health' ? 'Crop Health' : kpi.id === 'moisture' ? 'Soil Moisture' : kpi.id === 'area' ? 'Field Area' : kpi.label)}
+              </span>
               
               <motion.p 
                 key={kpi.value}
@@ -139,7 +143,7 @@ const KPICards = ({ selectedFarm }) => {
                 {kpi.value}
               </motion.p>
               
-              <p className="text-sm text-slate-400 font-bold truncate">{kpi.subtext}</p>
+              <p className="text-sm text-slate-400 font-bold truncate">{t(kpi.subtext)}</p>
             </div>
 
             {/* KPI Icon bubble */}

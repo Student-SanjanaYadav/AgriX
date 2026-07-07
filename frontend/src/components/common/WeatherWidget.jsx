@@ -1,8 +1,10 @@
 import React, { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { CloudSun, Droplets, Wind, CloudRain, Sun, Calendar, Clock, Compass } from 'lucide-react'
+import { useLanguage } from '../../context/LanguageContext'
 
 const WeatherWidget = ({ selectedFarm, weather: propWeather, sourceStatus }) => {
+  const { t } = useLanguage()
   const defaultWeather = {
     location: 'Central India Avg',
     temp: '32°C',
@@ -132,7 +134,7 @@ const WeatherWidget = ({ selectedFarm, weather: propWeather, sourceStatus }) => 
       {/* Header info */}
       <div className="flex items-center justify-between border-b border-white/5 pb-4 mb-3">
         <div>
-          <h3 className="font-black text-slate-100 text-sm md:text-base tracking-wider uppercase">Localized Climate</h3>
+          <h3 className="font-black text-slate-100 text-sm md:text-base tracking-wider uppercase">{t("Weather")}</h3>
           <p className="text-xs text-slate-400 font-bold mt-0.5">
             {activeWeather.location || (selectedFarm ? `${selectedFarm.district} Region` : 'Central Agricultural Hub')}
           </p>
@@ -148,7 +150,7 @@ const WeatherWidget = ({ selectedFarm, weather: propWeather, sourceStatus }) => 
               }
             `}>
               <span className={`h-1.5 w-1.5 rounded-full ${sourceStatus === 'live' ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400'}`} />
-              {sourceStatus === 'live' ? 'Live Weather Data' : 'Using Last Available Weather Data'}
+              {sourceStatus === 'live' ? t('Live Weather Data') : t('Using Last Available Weather Data')}
             </span>
           )}
         </div>
@@ -157,7 +159,7 @@ const WeatherWidget = ({ selectedFarm, weather: propWeather, sourceStatus }) => 
       {/* Main stats */}
       <div className="flex items-baseline gap-3 py-3">
         <span className="text-5xl font-black tracking-tight text-slate-100 font-mono">{activeWeather.temp}</span>
-        <span className="text-sm font-black text-slate-400 uppercase tracking-wide">{activeWeather.condition}</span>
+        <span className="text-sm font-black text-slate-400 uppercase tracking-wide">{t(activeWeather.condition)}</span>
       </div>
 
       {/* 2x3 Atmospheric metrics grid */}
@@ -165,42 +167,42 @@ const WeatherWidget = ({ selectedFarm, weather: propWeather, sourceStatus }) => 
         {/* Humidity */}
         <div className="flex flex-col items-center p-3 rounded-xl bg-white/2 border border-white/5 text-center">
           <Droplets className="h-5 w-5 text-cyan-400 mb-1.5 shrink-0" />
-          <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">Humidity</span>
+          <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">{t("Humidity")}</span>
           <span className="font-black text-slate-200 mt-0.5 font-mono text-sm">{activeWeather.humidity}</span>
         </div>
 
         {/* Rain probability */}
         <div className="flex flex-col items-center p-3 rounded-xl bg-white/2 border border-white/5 text-center">
           <CloudRain className="h-5 w-5 text-sky-400 mb-1.5 shrink-0" />
-          <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">Precipitation</span>
+          <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">{t("Rain Probability")}</span>
           <span className="font-black text-slate-200 mt-0.5 font-mono text-sm">{activeWeather.rainProb}</span>
         </div>
 
         {/* Wind speed */}
         <div className="flex flex-col items-center p-3 rounded-xl bg-white/2 border border-white/5 text-center">
           <Wind className="h-5 w-5 text-teal-400 mb-1.5 shrink-0" />
-          <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">Wind Speed</span>
+          <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">{t("Wind Speed")}</span>
           <span className="font-black text-slate-200 mt-0.5 font-mono text-sm">{activeWeather.windSpeed}</span>
         </div>
 
         {/* Cloud Cover */}
         <div className="flex flex-col items-center p-3 rounded-xl bg-white/2 border border-white/5 text-center">
           <CloudSun className="h-5 w-5 text-indigo-400 mb-1.5 shrink-0" />
-          <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">Cloud Cover</span>
+          <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">{t("Cloud Cover")}</span>
           <span className="font-black text-slate-200 mt-0.5 font-mono text-sm">{cloudVal}</span>
         </div>
 
         {/* Sunrise */}
         <div className="flex flex-col items-center p-3 rounded-xl bg-white/2 border border-white/5 text-center">
           <Clock className="h-5 w-5 text-amber-400 mb-1.5 shrink-0" />
-          <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">Sunrise</span>
+          <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">{t("Sunrise")}</span>
           <span className="font-black text-slate-200 mt-0.5 font-mono text-sm">{sunriseVal}</span>
         </div>
 
         {/* Sunset */}
         <div className="flex flex-col items-center p-3 rounded-xl bg-white/2 border border-white/5 text-center">
           <Compass className="h-5 w-5 text-orange-400 mb-1.5 shrink-0" />
-          <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">Sunset</span>
+          <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider">{t("Sunset")}</span>
           <span className="font-black text-slate-200 mt-0.5 font-mono text-sm">{sunsetVal}</span>
         </div>
       </div>

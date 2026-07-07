@@ -14,6 +14,7 @@ import {
   Line
 } from 'recharts'
 import { Activity, Droplets, Leaf, Thermometer, CloudRain, Trash2, LineChart as LucideLine } from 'lucide-react'
+import { useLanguage } from '../../context/LanguageContext'
 
 // Custom tooltip styling
 const CustomTooltip = ({ active, payload, label, unit }) => {
@@ -33,6 +34,7 @@ const CustomTooltip = ({ active, payload, label, unit }) => {
 }
 
 const Charts = ({ selectedFarm }) => {
+  const { t } = useLanguage()
   const [activeChart, setActiveChart] = useState('moisture')
 
   // Generate 30-day telemetry dataset dynamically based on selected farm seed
@@ -76,11 +78,11 @@ const Charts = ({ selectedFarm }) => {
   }, [selectedFarm?.status])
 
   const chartTabs = [
-    { id: 'moisture', label: 'Moisture (30d)', icon: Droplets, color: '#06b6d4', unit: '% VWC' },
-    { id: 'ndvi', label: 'NDVI (30d)', icon: Leaf, color: '#10b981', unit: ' index' },
-    { id: 'temp', label: 'Temp (30d)', icon: Thermometer, color: '#f59e0b', unit: '°C' },
-    { id: 'rainWater', label: 'Rain & Water (30d)', icon: CloudRain, color: '#3b82f6', unit: '' },
-    { id: 'yield', label: 'Yield Forecast (30d)', icon: LucideLine, color: '#8b5cf6', unit: '%' }
+    { id: 'moisture', label: t('Soil Moisture') + ' (30d)', icon: Droplets, color: '#06b6d4', unit: '% VWC' },
+    { id: 'ndvi', label: t('NDVI Index') + ' (30d)', icon: Leaf, color: '#10b981', unit: ' index' },
+    { id: 'temp', label: t('Temperature') + ' (30d)', icon: Thermometer, color: '#f59e0b', unit: '°C' },
+    { id: 'rainWater', label: t('Rain & Water (30d)'), icon: CloudRain, color: '#3b82f6', unit: '' },
+    { id: 'yield', label: t('Yield Prediction') + ' (30d)', icon: LucideLine, color: '#8b5cf6', unit: '%' }
   ]
 
   const activeTabObj = chartTabs.find(t => t.id === activeChart)
@@ -100,9 +102,9 @@ const Charts = ({ selectedFarm }) => {
             <Activity className="h-5.5 w-5.5 animate-pulse" />
           </div>
           <div>
-            <h3 className="font-black text-slate-100 text-sm tracking-wider uppercase font-sans">Historical Telemetry</h3>
+            <h3 className="font-black text-slate-100 text-sm tracking-wider uppercase font-sans">{t("Historical Telemetry")}</h3>
             <p className="text-[10px] text-slate-400 font-bold font-mono">
-              {selectedFarm ? `Telemetry Node: ${selectedFarm.id}` : 'General Regional Averages'}
+              {selectedFarm ? `Telemetry Node: ${selectedFarm.id}` : t('General Regional Averages')}
             </p>
           </div>
         </div>
@@ -125,7 +127,7 @@ const Charts = ({ selectedFarm }) => {
                 style={{ borderLeftColor: isSelected ? tab.color : 'transparent' }}
               >
                 <TabIcon className="h-3.5 w-3.5" style={{ color: tab.color }} />
-                <span>{tab.label.split(' ')[0]}</span>
+                <span>{tab.label.split(' (30d)')[0]}</span>
               </button>
             )
           })}
@@ -147,7 +149,7 @@ const Charts = ({ selectedFarm }) => {
               <XAxis dataKey="day" stroke="rgba(255,255,255,0.2)" fontSize={9} tickLine={false} axisLine={false} />
               <YAxis stroke="rgba(255,255,255,0.2)" fontSize={9} tickLine={false} axisLine={false} domain={[0, 100]} />
               <Tooltip content={<CustomTooltip unit="% VWC" />} cursor={{ stroke: 'rgba(255,255,255,0.05)', strokeWidth: 1 }} />
-              <Area type="monotone" name="Soil Moisture" dataKey="moisture" stroke="#06b6d4" strokeWidth={2} fill="url(#moistureGrad)" />
+              <Area type="monotone" name={t("Soil Moisture")} dataKey="moisture" stroke="#06b6d4" strokeWidth={2} fill="url(#moistureGrad)" />
             </AreaChart>
           ) : activeChart === 'ndvi' ? (
             <AreaChart data={chartData} margin={{ top: 5, right: 5, left: -40, bottom: 0 }}>
@@ -161,7 +163,7 @@ const Charts = ({ selectedFarm }) => {
               <XAxis dataKey="day" stroke="rgba(255,255,255,0.2)" fontSize={9} tickLine={false} axisLine={false} />
               <YAxis stroke="rgba(255,255,255,0.2)" fontSize={9} tickLine={false} axisLine={false} domain={[0, 1.0]} />
               <Tooltip content={<CustomTooltip unit=" index" />} cursor={{ stroke: 'rgba(255,255,255,0.05)', strokeWidth: 1 }} />
-              <Area type="monotone" name="NDVI Index" dataKey="ndvi" stroke="#10b981" strokeWidth={2} fill="url(#ndviGrad)" />
+              <Area type="monotone" name={t("NDVI Index")} dataKey="ndvi" stroke="#10b981" strokeWidth={2} fill="url(#ndviGrad)" />
             </AreaChart>
           ) : activeChart === 'temp' ? (
             <LineChart data={chartData} margin={{ top: 5, right: 5, left: -40, bottom: 0 }}>
@@ -169,7 +171,7 @@ const Charts = ({ selectedFarm }) => {
               <XAxis dataKey="day" stroke="rgba(255,255,255,0.2)" fontSize={9} tickLine={false} axisLine={false} />
               <YAxis stroke="rgba(255,255,255,0.2)" fontSize={9} tickLine={false} axisLine={false} domain={[0, 50]} />
               <Tooltip content={<CustomTooltip unit="°C" />} cursor={{ stroke: 'rgba(255,255,255,0.05)', strokeWidth: 1 }} />
-              <Line type="monotone" name="Temperature" dataKey="temp" stroke="#f59e0b" strokeWidth={2.5} dot={false} />
+              <Line type="monotone" name={t("Temperature")} dataKey="temp" stroke="#f59e0b" strokeWidth={2.5} dot={false} />
             </LineChart>
           ) : activeChart === 'rainWater' ? (
             <BarChart data={chartData} margin={{ top: 5, right: 5, left: -40, bottom: 0 }}>
@@ -182,16 +184,16 @@ const Charts = ({ selectedFarm }) => {
                     return (
                       <div className="bg-[#090d26]/95 border border-white/10 p-3 rounded-lg shadow-xl text-xs space-y-1">
                         <p className="font-semibold text-slate-300">Day {label}</p>
-                        <p className="text-blue-400 font-bold">Rainfall: {payload[0].value} mm</p>
-                        <p className="text-cyan-400 font-bold">Water Used: {payload[1].value} Litres</p>
+                        <p className="text-blue-400 font-bold">{t("Rain Probability")}: {payload[0].value} mm</p>
+                        <p className="text-cyan-400 font-bold">{t("Water Saving")}: {payload[1].value} Litres</p>
                       </div>
                     )
                   }
                   return null
                 }}
               />
-              <Bar name="Rainfall (mm)" dataKey="rainfall" fill="#3b82f6" fillOpacity={0.6} radius={[2, 2, 0, 0]} />
-              <Bar name="Water Used (L)" dataKey="waterUsage" fill="#06b6d4" fillOpacity={0.4} radius={[2, 2, 0, 0]} />
+              <Bar name={t("Rain Probability") + " (mm)"} dataKey="rainfall" fill="#3b82f6" fillOpacity={0.6} radius={[2, 2, 0, 0]} />
+              <Bar name={t("Water Saving") + " (L)"} dataKey="waterUsage" fill="#06b6d4" fillOpacity={0.4} radius={[2, 2, 0, 0]} />
             </BarChart>
           ) : (
             <LineChart data={chartData} margin={{ top: 5, right: 5, left: -40, bottom: 0 }}>
@@ -199,7 +201,7 @@ const Charts = ({ selectedFarm }) => {
               <XAxis dataKey="day" stroke="rgba(255,255,255,0.2)" fontSize={9} tickLine={false} axisLine={false} />
               <YAxis stroke="rgba(255,255,255,0.2)" fontSize={9} tickLine={false} axisLine={false} domain={[0, 100]} />
               <Tooltip content={<CustomTooltip unit="%" />} cursor={{ stroke: 'rgba(255,255,255,0.05)', strokeWidth: 1 }} />
-              <Line type="monotone" name="Yield Prob" dataKey="yieldPred" stroke="#8b5cf6" strokeWidth={2.5} dot={false} />
+              <Line type="monotone" name={t("Yield Prediction")} dataKey="yieldPred" stroke="#8b5cf6" strokeWidth={2.5} dot={false} />
             </LineChart>
           )}
         </ResponsiveContainer>

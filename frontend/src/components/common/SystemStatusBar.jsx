@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useLanguage } from '../../context/LanguageContext'
 import { 
   BrainCircuit, 
   Orbit, 
@@ -9,6 +10,7 @@ import {
 } from 'lucide-react'
 
 const SystemStatusBar = ({ selectedFarm }) => {
+  const { t } = useLanguage()
   const [timestamp, setTimestamp] = useState('N/A')
 
   useEffect(() => {
@@ -34,25 +36,25 @@ const SystemStatusBar = ({ selectedFarm }) => {
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
           <BrainCircuit className="h-4 w-4 text-slate-400 shrink-0" />
-          <span className="font-medium">Edge AI Online</span>
+          <span className="font-medium">{t("Edge AI Online")}</span>
         </div>
 
         {/* Satellite Sync */}
         <div className="flex items-center gap-2">
           <Orbit className="h-4 w-4 text-emerald-400 animate-spin-slow shrink-0" />
-          <span className="font-medium text-slate-300">Satellite Sync Active</span>
+          <span className="font-medium text-slate-300">{t("Satellite Sync Active")}</span>
         </div>
 
         {/* Sensors Telemetry */}
         <div className="flex items-center gap-2">
           <Activity className="h-4 w-4 text-emerald-400 shrink-0" />
-          <span className="font-medium">Sensors Active (100%)</span>
+          <span className="font-medium">{t("Sensors Active (100%)")}</span>
         </div>
 
         {/* Weather Sync */}
         <div className="flex items-center gap-2">
           <CloudSun className="h-4 w-4 text-emerald-400 shrink-0" />
-          <span className="font-medium">Weather Synced</span>
+          <span className="font-medium">{t("Weather Synced")}</span>
         </div>
 
       </div>
@@ -60,7 +62,7 @@ const SystemStatusBar = ({ selectedFarm }) => {
       {/* Right side: Dynamic Analysis Timestamp */}
       <div className="flex items-center gap-2 text-sm font-semibold text-slate-400">
         <Clock className="h-4 w-4 text-blue-400 shrink-0 animate-pulse" />
-        <span>Last AI Analysis:</span>
+        <span>{t("Last AI Analysis:")}</span>
         <motion.span 
           key={timestamp}
           initial={{ opacity: 0, y: -5 }}

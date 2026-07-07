@@ -13,8 +13,10 @@ import {
   Target,
   Sparkles
 } from 'lucide-react'
+import { useLanguage } from '../../context/LanguageContext'
 
 const AgriXIntelligence = ({ selectedFarm }) => {
+  const { t } = useLanguage()
   const [isExpanded, setIsExpanded] = useState(false)
 
   // Empty State: rendered if no farm has been selected on the map yet
@@ -32,9 +34,9 @@ const AgriXIntelligence = ({ selectedFarm }) => {
           <BrainCircuit className="h-8 w-8" />
         </motion.div>
         
-        <h3 className="text-slate-200 font-bold text-sm tracking-wide">Awaiting Target Asset</h3>
+        <h3 className="text-slate-200 font-bold text-sm tracking-wide">{t("Awaiting Target Asset")}</h3>
         <p className="text-xs text-slate-500 max-w-xs mt-2 leading-relaxed">
-          Select a precision field polygon on the geospatial map to initiate Edge AI telemetry and soil diagnostics.
+          {t("Select a precision field polygon on the geospatial map to initiate Edge AI telemetry and soil diagnostics.")}
         </p>
       </div>
     )
@@ -108,9 +110,9 @@ const AgriXIntelligence = ({ selectedFarm }) => {
           </div>
           <div>
             <h3 className="font-bold text-slate-100 text-sm tracking-wide flex items-center gap-1.5">
-              AgriX Intelligence
+              {t("AgriX Intelligence")}
             </h3>
-            <p className="text-[10px] text-slate-400">Target: {selectedFarm.id}</p>
+            <p className="text-[10px] text-slate-400">{t("Telemetry Node:")} {selectedFarm.id}</p>
           </div>
         </div>
 
@@ -120,7 +122,7 @@ const AgriXIntelligence = ({ selectedFarm }) => {
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-500"></span>
           </span>
-          <span className="text-[9px] font-bold text-blue-400 uppercase tracking-wider">Edge AI Active</span>
+          <span className="text-[9px] font-bold text-blue-400 uppercase tracking-wider">{t("Edge AI Active")}</span>
         </div>
       </div>
 
@@ -130,15 +132,15 @@ const AgriXIntelligence = ({ selectedFarm }) => {
         {/* Core Farm Metadata */}
         <div className="grid grid-cols-3 gap-2">
           <div className="p-2 rounded bg-white/2 border border-white/5">
-            <span className="text-[9px] text-slate-500 uppercase font-semibold">Crop</span>
+            <span className="text-[9px] text-slate-500 uppercase font-semibold">{t("Active Crop")}</span>
             <p className="font-semibold text-slate-200 text-xs mt-0.5 truncate">{selectedFarm.crop}</p>
           </div>
           <div className="p-2 rounded bg-white/2 border border-white/5">
-            <span className="text-[9px] text-slate-500 uppercase font-semibold">Area</span>
+            <span className="text-[9px] text-slate-500 uppercase font-semibold">{t("Field Area")}</span>
             <p className="font-semibold text-slate-200 text-xs mt-0.5">{selectedFarm.area} ha</p>
           </div>
           <div className="p-2 rounded bg-white/2 border border-white/5">
-            <span className="text-[9px] text-slate-500 uppercase font-semibold">Moisture</span>
+            <span className="text-[9px] text-slate-500 uppercase font-semibold">{t("Soil Moisture")}</span>
             <p className="font-semibold text-cyan-400 text-xs mt-0.5 flex items-center gap-0.5">
               <Droplets className="h-3.5 w-3.5 shrink-0" />
               {selectedFarm.moisture}
@@ -178,40 +180,40 @@ const AgriXIntelligence = ({ selectedFarm }) => {
 
           {/* Health index details */}
           <div className="space-y-1">
-            <span className="text-[9px] text-slate-500 uppercase font-semibold">Crop Health Matrix</span>
+            <span className="text-[9px] text-slate-500 uppercase font-semibold">{t("Crop Health Matrix")}</span>
             <div className="flex items-baseline gap-2">
-              <span className="text-sm font-bold text-slate-200">NDVI Score:</span>
+              <span className="text-sm font-bold text-slate-200">{t("NDVI Index")}:</span>
               <span className="text-sm font-bold text-emerald-400 font-mono">{ai.ndvi}</span>
             </div>
-            <p className="text-[10px] text-slate-400">Vegetation density index rating.</p>
+            <p className="text-[10px] text-slate-400">{t("Vegetation density index rating.")}</p>
           </div>
         </div>
 
         {/* Parameter Details Matrix */}
         <div className="grid grid-cols-2 gap-3.5 text-xs">
           <div>
-            <span className="text-slate-500 text-[10px]">Water Stress:</span>
+            <span className="text-slate-500 text-[10px]">{t("Water Stress")}:</span>
             <p className={`font-semibold mt-0.5
               ${selectedFarm.status === 'healthy' ? 'text-emerald-400' : selectedFarm.status === 'moderate' ? 'text-amber-400' : 'text-rose-400'}
             `}>
-              {ai.waterStress}
+              {t(ai.waterStress)}
             </p>
           </div>
           <div>
-            <span className="text-slate-500 text-[10px]">Estimated Water Saving:</span>
+            <span className="text-slate-500 text-[10px]">{t("Water Saving")}:</span>
             <p className="font-semibold text-teal-400 mt-0.5 flex items-center gap-1">
               <TrendingUp className="h-3.5 w-3.5" />
-              +{ai.saving} Saved
+              +{ai.saving} {t("Saved")}
             </p>
           </div>
           <div>
-            <span className="text-slate-500 text-[10px]">AI Model Confidence:</span>
+            <span className="text-slate-500 text-[10px]">{t("AI Confidence")}:</span>
             <p className="font-semibold text-blue-400 mt-0.5 font-mono">{ai.confidence}</p>
           </div>
           <div>
-            <span className="text-slate-500 text-[10px]">Priority Level:</span>
+            <span className="text-slate-500 text-[10px]">{t("Priority")}:</span>
             <span className={`inline-block text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded border mt-0.5 ${ai.priorityColor}`}>
-              {ai.priority}
+              {t(ai.priority.charAt(0).toUpperCase() + ai.priority.slice(1).toLowerCase())}
             </span>
           </div>
         </div>
@@ -219,31 +221,31 @@ const AgriXIntelligence = ({ selectedFarm }) => {
         {/* Selected Field Summary Panel */}
         <div className="p-3.5 rounded-xl border border-white/5 bg-white/2 space-y-2">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">
-            Selected Field Summary
+            {t("Selected Field Summary")}
           </span>
           <div className="grid grid-cols-2 gap-y-2 text-xs">
             <div className="flex justify-between pr-4 border-r border-white/5">
-              <span className="text-slate-500">Farm ID:</span>
+              <span className="text-slate-500">{t("Field Target:")}</span>
               <span className="font-semibold text-slate-200 font-mono">{selectedFarm.id}</span>
             </div>
             <div className="flex justify-between pl-4">
-              <span className="text-slate-500">Crop:</span>
+              <span className="text-slate-500">{t("Active Crop")}:</span>
               <span className="font-semibold text-slate-200">{selectedFarm.crop}</span>
             </div>
             <div className="flex justify-between pr-4 border-r border-white/5 pt-1">
-              <span className="text-slate-500">District:</span>
+              <span className="text-slate-500">{t("District")}:</span>
               <span className="font-semibold text-slate-200">{selectedFarm.name ? selectedFarm.name.split(' ')[0] : 'N/A'}</span>
             </div>
             <div className="flex justify-between pl-4 pt-1">
-              <span className="text-slate-500">Area:</span>
+              <span className="text-slate-500">{t("Field Area")}:</span>
               <span className="font-semibold text-slate-200">{selectedFarm.area} ha</span>
             </div>
             <div className="col-span-2 flex justify-between border-t border-white/5 pt-2 mt-1">
-              <span className="text-slate-500">Health:</span>
+              <span className="text-slate-500">{t("Crop Health")}:</span>
               <span className={`font-bold capitalize
                 ${selectedFarm.status === 'healthy' ? 'text-emerald-400' : selectedFarm.status === 'moderate' ? 'text-amber-400' : 'text-rose-400'}
               `}>
-                {selectedFarm.status}
+                {t(selectedFarm.status.charAt(0).toUpperCase() + selectedFarm.status.slice(1).toLowerCase())}
               </span>
             </div>
           </div>
@@ -253,9 +255,9 @@ const AgriXIntelligence = ({ selectedFarm }) => {
         <div className="p-3.5 rounded-xl bg-gradient-to-r from-blue-500/15 to-indigo-500/5 border border-blue-500/20 shadow-md">
           <span className="text-[9px] font-bold uppercase tracking-wider text-blue-400 flex items-center gap-1.5">
             <Cpu className="h-3.5 w-3.5" />
-            AI Decision recommendation
+            {t("AI Recommendation")}
           </span>
-          <p className="text-xs font-semibold text-slate-200 mt-1">{ai.recommendation}</p>
+          <p className="text-xs font-semibold text-slate-200 mt-1">{t(ai.recommendation)}</p>
         </div>
 
       </div>
@@ -268,7 +270,7 @@ const AgriXIntelligence = ({ selectedFarm }) => {
         >
           <span className="flex items-center gap-1.5">
             <Sparkles className="h-3.5 w-3.5 text-blue-400" />
-            AI Analysis Summary
+            {t("AI Analysis Summary")}
           </span>
           {isExpanded ? (
             <ChevronUp className="h-4 w-4 text-slate-500" />
@@ -287,7 +289,7 @@ const AgriXIntelligence = ({ selectedFarm }) => {
               className="overflow-hidden"
             >
               <p className="text-xs text-slate-400 mt-2.5 leading-relaxed bg-white/2 border border-white/5 p-3 rounded-lg font-sans">
-                {ai.summary}
+                {t(ai.summary)}
               </p>
             </motion.div>
           )}
