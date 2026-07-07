@@ -106,7 +106,8 @@ const Dashboard = () => {
         waterStress: selectedFarm?.status === 'healthy' ? 'Low (Optimal)' : selectedFarm?.status === 'moderate' ? 'Moderate Dehydration' : 'Severe Crop Stress',
         soilType: selectedFarm?.soilType || 'Clay Loam',
         lastIrrigation: selectedFarm?.lastIrrigation || '12h ago',
-        growthStage: selectedFarm?.growthStage || 'Vegetative Growth'
+        growthStage: selectedFarm?.growthStage || 'Vegetative Growth',
+        season: selectedFarm?.season || 'Kharif'
       }
 
       const result = generateRecommendation(inputs)
@@ -130,29 +131,89 @@ const Dashboard = () => {
     { id: 'EV-8847', time: '08:15 AM', asset: 'AGX-AP-001', location: 'Guntur', status: 'moderate', action: 'Pulse Trigger', crop: 'Cotton' }
   ])
 
-  const insights = [
-    {
-      id: 'INS-01',
-      title: 'Moisture Evaporation Alert',
-      desc: 'Jaipur crop sectors display critical Evapotranspiration levels (VWC < 30%). Immediate hydraulic overrides are recommended.',
-      status: 'critical',
-      tag: 'Critical Stress'
-    },
-    {
-      id: 'INS-02',
-      title: 'NDVI Optimization Met',
-      desc: 'Ludhiana wheat fields logged optimal chlorophyll growth. Maintain default water bypass hold settings.',
-      status: 'healthy',
-      tag: 'Optimal Growth'
-    },
-    {
-      id: 'INS-03',
-      title: 'Evaporative Anomaly Mapped',
-      desc: 'Scattered thermal scans highlight moisture dry spots in Bhopal zones. Adjust scheduled valve timers.',
-      status: 'moderate',
-      tag: 'Evap Sync'
+  const getDynamicInsights = (farm) => {
+    if (!farm) {
+      return [
+        {
+          id: 'INS-01',
+          title: 'Moisture Evaporation Alert',
+          desc: 'Jaipur crop sectors display critical Evapotranspiration levels (VWC < 30%). Immediate hydraulic overrides are recommended.',
+          status: 'critical',
+          tag: 'Critical Stress'
+        },
+        {
+          id: 'INS-02',
+          title: 'NDVI Optimization Met',
+          desc: 'Ludhiana wheat fields logged optimal chlorophyll growth. Maintain default water bypass hold settings.',
+          status: 'healthy',
+          tag: 'Optimal Growth'
+        },
+        {
+          id: 'INS-03',
+          title: 'Evaporative Anomaly Mapped',
+          desc: 'Scattered thermal scans highlight moisture dry spots in Bhopal zones. Adjust scheduled valve timers.',
+          status: 'moderate',
+          tag: 'Evap Sync'
+        }
+      ]
     }
-  ]
+
+    const crop = farm.crop || 'Crop'
+    const district = farm.district || 'District'
+    const season = farm.season || 'Kharif'
+    const status = farm.status || 'healthy'
+
+    let insight1 = {
+      id: 'INS-01',
+      title: 'Evaporation Stress Analysis',
+      desc: `${district} ${crop} fields show stable transpiration patterns under current ${season} conditions. No immediate threat mapped.`,
+      status: 'healthy',
+      tag: 'Healthy Trans'
+    }
+    let insight2 = {
+      id: 'INS-02',
+      title: 'NDVI Growth Trajectory',
+      desc: `Geospatial NDVI scans for ${crop} align with the standard ${season} lifecycle curve. Photosynthesis rate is optimal.`,
+      status: 'healthy',
+      tag: 'Growth Sync'
+    }
+
+    if (status === 'critical') {
+      insight1 = {
+        id: 'INS-01',
+        title: `${crop} Wilting Hazard Alert`,
+        desc: `Extreme high evapotranspiration detected on ${crop} in ${district}. Soil moisture is below wilting point (<25% VWC). Immediate irrigation is needed.`,
+        status: 'critical',
+        tag: 'Wilting Risk'
+      }
+      insight2 = {
+        id: 'INS-02',
+        title: 'Chlorophyll Deficit Warning',
+        desc: `Sentinel-2 red-edge band shows localized canopy stress on ${crop}. Nitrogen uptake is limited due to moisture deficit.`,
+        status: 'critical',
+        tag: 'NDVI Anomaly'
+      }
+    } else if (status === 'moderate') {
+      insight1 = {
+        id: 'INS-01',
+        title: 'Mild Dehydration Spotted',
+        desc: `${crop} fields in ${district} exhibit slight thermal stress signatures. Restoring moisture levels is recommended within 12 hours.`,
+        status: 'moderate',
+        tag: 'Moisture Warn'
+      }
+      insight2 = {
+        id: 'INS-02',
+        title: 'Growth Phase Shift Sync',
+        desc: `${crop} is currently transitioning to the flowering stage. Increased water sensitivity detected in root zone.`,
+        status: 'moderate',
+        tag: 'Phase Warning'
+      }
+    }
+
+    return [insight1, insight2]
+  }
+
+  const insights = getDynamicInsights(selectedFarm)
 
   const handleSelectFarm = (farm) => {
     if (farm === null) {

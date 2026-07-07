@@ -5,6 +5,99 @@
  * Generates dynamic agricultural expert recommendations based on multi-variate telemetry inputs.
  */
 
+// Helper to determine crop-specific and season-specific irrigation parameters
+const getCropSeasonSpec = (crop, season, growthStage, moistureVal, tempVal, rainProbVal) => {
+  const isPaddy = crop.toLowerCase().includes('rice') || crop.toLowerCase().includes('paddy')
+  const isWheat = crop.toLowerCase().includes('wheat')
+  const isSugarcane = crop.toLowerCase().includes('sugarcane')
+  const isCotton = crop.toLowerCase().includes('cotton')
+  const isMustard = crop.toLowerCase().includes('mustard')
+  const isZaidCrop = crop.toLowerCase().includes('watermelon') || crop.toLowerCase().includes('cucumber') || crop.toLowerCase().includes('moong') || crop.toLowerCase().includes('melon')
+
+  // Deficit State Recommendations (<30% soil moisture)
+  let deficitRecommendation = `Critical moisture deficit detected on ${crop}. Saturation is at ${moistureVal}% VWC in dry conditions. Irrigate immediately.`
+  let deficitAction = 'Initiate immediate emergency override. Open flow valves for 25 minutes. Inspect moisture levels in 12 hours.'
+  let deficitImpact = 'Prevents crop stress, increases soil saturation VWC by 18%, and safeguards harvest yield.'
+
+  if (isPaddy) {
+    deficitRecommendation = `Paddy field is in water deficit (${moistureVal}%). Maintaining a 5cm standing water depth is critical during the vegetative growth stage in ${season}. Start flooding immediately.`
+    deficitAction = 'Turn on high-capacity tubewell/canal pumps immediately to flood the basin plots. Verify bund wall integrity.'
+    deficitImpact = 'Ensures optimal root drowning, promotes rapid tillering, and prevents weed colonization.'
+  } else if (isWheat) {
+    deficitRecommendation = `Critical crown root initiation (CRI) / flowering stage deficit on Wheat (${moistureVal}%). Irrigate 22 mm immediately to prevent grain shriveling in ${season} season.`
+    deficitAction = 'Open secondary distribution pipe lines. Run sprinkler system for 45 minutes to achieve uniform 20 mm moisture layer.'
+    deficitImpact = 'Protects crown root growth nodes, secures spikelet formation, and stabilizes yield potential.'
+  } else if (isSugarcane) {
+    deficitRecommendation = `Sugarcane sector is dry (${moistureVal}%). High moisture is required during grand growth phase in ${season}. Apply 30 mm irrigation.`
+    deficitAction = 'Activate heavy furrow irrigation flow lines. Keep valves open for 40 minutes.'
+    deficitImpact = 'Promotes maximum cane elongation and safeguards sugar accumulation rates.'
+  } else if (isCotton) {
+    deficitRecommendation = `Moisture deficit (${moistureVal}%) on Cotton. Cotton needs precise root watering during early squaring/flowering. Apply 15 mm drip water.`
+    deficitAction = 'Activate localized drip irrigation zone feeds for 20 minutes. Keep check on lateral leakage points.'
+    deficitImpact = 'Prevents square dropping, maintains boll growth, and avoids root rot from over-watering.'
+  } else if (isMustard) {
+    deficitRecommendation = `Deficit detected on Mustard (${moistureVal}%). Apply light 12 mm irrigation during pod development to enhance oil seeds content.`
+    deficitAction = 'Run micro-sprinklers for 18 minutes. Ensure no pooling of water in low-lying sections.'
+    deficitImpact = 'Supports siliqua development and maximizes seed oil yield.'
+  } else if (isZaidCrop) {
+    deficitRecommendation = `Summer Zaid crop ${crop} requires urgent water (${moistureVal}%) under extreme heat (${tempVal}°C). Apply 10 mm drip feed.`
+    deficitAction = 'Activate micro-drip networks. Run a short 15-minute cool irrigation cycle in early morning.'
+    deficitImpact = 'Lowers soil heat stress, prevents fruit cracking, and maintains high turgidity.'
+  }
+
+  // Moderate Deficit State Recommendations (30% to 42% soil moisture)
+  let moderateRecommendation = `Soil moisture is low-moderate (${moistureVal}%). High daytime temperature (${tempVal}°C) detected. Irrigate 15 mm within 12 hours.`
+  let moderateAction = 'Schedule standard pulse irrigation flow (12 minutes) at the next cycle. Monitor weather wind speed and evapotranspiration logs.'
+  let moderateImpact = 'Transpiration rates stabilized, preventing localized dry-spot anomalies.'
+
+  if (isPaddy) {
+    moderateRecommendation = `Paddy saturation is moderate (${moistureVal}%). Schedule a light 15 mm irrigation to restore field water levels.`
+    moderateAction = 'Schedule standard pump run for 20 minutes in early morning.'
+    moderateImpact = 'Maintains anaerobic soil conditions necessary for paddy growth.'
+  } else if (isWheat) {
+    moderateRecommendation = `Wheat field displays mild deficit (${moistureVal}%). Apply a scheduled 15 mm sprinkler irrigation before wind speeds increase.`
+    moderateAction = 'Run central sprinklers for 30 minutes in late evening to minimize wind drift.'
+    moderateImpact = 'Restores root zone moisture without causing lodging stress.'
+  } else if (isSugarcane) {
+    moderateRecommendation = `Sugarcane moisture is at ${moistureVal}%. Schedule a standard 20 mm furrow cycle to maintain leaf spindle growth.`
+    moderateAction = 'Open furrow gates in section B for 25 minutes.'
+    moderateImpact = 'Maintains rapid vegetative extension rate during ${season} heat.'
+  } else if (isCotton) {
+    moderateRecommendation = `Cotton is showing slight stress (${moistureVal}%). Schedule a light 10 mm drip cycle to prevent square shedding.`
+    moderateAction = 'Trigger drip zone A for 15 minutes.'
+    moderateImpact = 'Maintains balanced vegetative and reproductive development.'
+  } else if (isZaidCrop) {
+    moderateRecommendation = `Summer crop ${crop} needs moisture boost (${moistureVal}%). Schedule 8 mm drip pulse tonight.`
+    moderateAction = 'Run night drip timers for 12 minutes to maximize absorption and reduce evapotranspiration.'
+    moderateImpact = 'Maintains continuous vine hydration and optimizes fruit setting.'
+  }
+
+  // Conservation State Recommendations (>45% moisture & >70% rain prob)
+  let conservationRecommendation = `Delay irrigation by 12 hours because rainfall probability exceeds ${rainProbVal}%.`
+  let conservationAction = 'Keep all flow valves in standby bypass mode. Re-sync geospatial satellite NDVI reflectance index in 24 hours.'
+  let conservationImpact = 'Conserves ground water table reservoir reserves and saves utility power cost.'
+
+  if (isPaddy) {
+    conservationRecommendation = `High moisture (${moistureVal}%) and forecasted rain (${rainProbVal}%). Shut down all pumps to capture natural precipitation in paddy basins.`
+    conservationAction = 'Turn off gravity canal feed lines and pump power networks. Inspect spillway outlets.'
+    conservationImpact = 'Saves 100% of pumping electrical costs and prevents field washouts.'
+  } else if (isCotton || isMustard) {
+    conservationRecommendation = `Forecasted rain (${rainProbVal}%) and soil moisture (${moistureVal}%). Delay irrigation. ${crop} is sensitive to waterlogging.`
+    conservationAction = 'Keep valves closed. Inspect drainage ditches to prevent pooling from heavy rainfall.'
+    conservationImpact = 'Avoids root-zone waterlogging, saving nitrogen fertilizer from leaching.'
+  } else if (isZaidCrop) {
+    conservationRecommendation = `Rain expected (${rainProbVal}%). Hold summer irrigation. Drip networks in bypass standby.`
+    conservationAction = 'Deactivate automatic drip schedule timers for the next 24 hours.'
+    conservationImpact = 'Saves water reserves and protects summer crops from soil fungal issues.'
+  }
+
+  return {
+    deficit: { recommendation: deficitRecommendation, action: deficitAction, impact: deficitImpact },
+    moderate: { recommendation: moderateRecommendation, action: moderateAction, impact: moderateImpact },
+    conservation: { recommendation: conservationRecommendation, action: conservationAction, impact: conservationImpact }
+  }
+}
+
 export const generateRecommendation = (inputs) => {
   const {
     id = 'N/A',
@@ -50,16 +143,22 @@ export const generateRecommendation = (inputs) => {
   let confidence = Math.min(99, Math.max(85, 92 + (seed % 8)))
   let yieldPrediction = '+0.0%'
   let explanation = []
+  let actionPlan = ''
+  let expectedImpact = ''
 
   const isFlowering = growthStage.toLowerCase().includes('flowering')
   const isVegetative = growthStage.toLowerCase().includes('vegetative')
+
+  const specs = getCropSeasonSpec(crop, season, growthStage, moistureVal, tempVal, rainProbVal)
 
   // Rule-Based Expert Decision Tree
   
   // Rule 1: Saturated soil & imminent rain -> CONSERVE
   if (moistureVal > 45 && rainProbVal > 70) {
     waterSavingLitres = Math.floor(areaVal * 320)
-    recommendation = `Delay irrigation by 12 hours because rainfall probability exceeds ${rainProbVal}%. Estimated water saving: ${waterSavingLitres} L.`
+    recommendation = specs.conservation.recommendation
+    actionPlan = specs.conservation.action
+    expectedImpact = specs.conservation.impact
     priority = 'Low'
     risk = 'Low'
     waterReq = 'Low'
@@ -77,14 +176,9 @@ export const generateRecommendation = (inputs) => {
     waterReq = 'High'
     waterSavingLitres = 0
     yieldPrediction = `-${(10 + (seed % 8)).toFixed(1)}% (If unmitigated)`
-
-    if (isVegetative) {
-      recommendation = `Soil moisture has dropped below the crop threshold during the vegetative stage. Irrigate 22 mm within the next 8 hours.`
-    } else if (isFlowering) {
-      recommendation = `Soil moisture has dropped below the crop threshold during the flowering stage. Irrigate 25 mm immediately to protect flower settings.`
-    } else {
-      recommendation = `Critical moisture deficit detected on ${crop}. Saturation is at ${moistureVal}% VWC in dry conditions. Irrigate immediately.`
-    }
+    recommendation = specs.deficit.recommendation
+    actionPlan = specs.deficit.action
+    expectedImpact = specs.deficit.impact
 
     explanation = [
       { text: `Soil moisture (${moistureVal}%) below crop limit (<30%)`, status: 'fail' },
@@ -96,7 +190,9 @@ export const generateRecommendation = (inputs) => {
   // Rule 3: Moderate dehydration -> SCHEDULE PULSE
   else if (moistureVal < 42) {
     waterSavingLitres = Math.floor(areaVal * 150)
-    recommendation = `Soil moisture is low-moderate (${moistureVal}%). High daytime temperature (${tempVal}°C) and wind speeds (${windSpeed}) detected. Irrigate 15 mm within 12 hours.`
+    recommendation = specs.moderate.recommendation
+    actionPlan = specs.moderate.action
+    expectedImpact = specs.moderate.impact
     priority = isFlowering ? 'Critical' : 'Medium'
     waterReq = isFlowering ? 'High' : 'Medium'
     yieldPrediction = `+${(2 + (seed % 3)).toFixed(1)}%`
@@ -109,10 +205,12 @@ export const generateRecommendation = (inputs) => {
   // Rule 4: Optimal parameters -> DELAY / STANDBY
   else {
     waterSavingLitres = Math.floor(areaVal * 280)
-    recommendation = `Moisture index is optimal (${moistureVal}%). Soil hydration is within target bounds. Standby mode on irrigation valves.`
+    recommendation = `Moisture index is optimal (${moistureVal}%). Soil hydration is within target bounds for ${crop} during the ${season} season.`
     priority = 'Normal'
     waterReq = 'Low'
     yieldPrediction = `+${(4 + (seed % 4)).toFixed(1)}%`
+    actionPlan = 'Keep all flow valves in standby bypass mode. Re-sync geospatial satellite NDVI reflectance index in 24 hours.'
+    expectedImpact = 'Conserves ground water table reservoir reserves and saves utility power cost.'
     explanation = [
       { text: `Soil moisture is optimal (${moistureVal}%)`, status: 'pass' },
       { text: `NDVI reflectance indicates healthy crop density (${ndviVal.toFixed(2)})`, status: 'pass' },
@@ -122,20 +220,6 @@ export const generateRecommendation = (inputs) => {
 
   const costSavingVal = Math.floor(waterSavingLitres * 0.08)
   const costSaving = costSavingVal > 0 ? `₹${costSavingVal.toLocaleString('en-IN')} Saved` : '₹0 Saved'
-
-  let actionPlan = ''
-  let expectedImpact = ''
-
-  if (priority === 'Critical') {
-    actionPlan = 'Initiate immediate emergency override. Open secondary flow valves for 25 minutes. Inspect moisture levels in 12 hours.'
-    expectedImpact = 'Prevents crop stress, increases soil saturation VWC by 18%, and safeguards harvest yield.'
-  } else if (priority === 'Medium') {
-    actionPlan = 'Schedule standard pulse irrigation flow (12 minutes) at the next cycle. Monitor weather wind speed and evapotranspiration logs.'
-    expectedImpact = 'Transpiration rates stabilized, preventing localized dry-spot anomalies.'
-  } else {
-    actionPlan = 'Keep all flow valves in standby bypass mode. Re-sync geospatial satellite NDVI reflectance index in 24 hours.'
-    expectedImpact = 'Conserves ground water table reservoir reserves and saves utility power cost.'
-  }
 
   const saturationIndex = `${moistureVal}%`
   const valveStatus = status === 'healthy' ? 'Closed (Bypass)' : status === 'moderate' ? 'Scheduled Pulse' : 'Open (High Flow)'

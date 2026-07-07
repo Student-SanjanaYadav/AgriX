@@ -178,6 +178,180 @@ export const regionalConfig = {
   }
 }
 
+// Region-specific and Season-specific agricultural mapping database for India
+export const regionalSeasonalCrops = {
+  "Punjab": {
+    "Kharif": ["Rice (Paddy)", "Maize", "Cotton", "Sugarcane"],
+    "Rabi": ["Wheat", "Mustard", "Barley", "Gram"],
+    "Zaid": ["Moong Dal", "Sunflower", "Vegetables"]
+  },
+  "Haryana": {
+    "Kharif": ["Rice (Paddy)", "Maize", "Cotton", "Bajra"],
+    "Rabi": ["Wheat", "Mustard", "Barley", "Gram"],
+    "Zaid": ["Moong Dal", "Cucumber", "Vegetables"]
+  },
+  "Uttar Pradesh": {
+    "Kharif": ["Sugarcane", "Rice (Paddy)", "Maize", "Pulses"],
+    "Rabi": ["Wheat", "Potato", "Mustard", "Gram"],
+    "Zaid": ["Watermelon", "Moong Dal", "Vegetables"]
+  },
+  "Bihar": {
+    "Kharif": ["Rice (Paddy)", "Maize", "Jute", "Lentils"],
+    "Rabi": ["Wheat", "Mustard", "Potato", "Gram"],
+    "Zaid": ["Watermelon", "Moong Dal", "Vegetables"]
+  },
+  "Maharashtra": {
+    "Kharif": ["Cotton", "Soybean", "Sugarcane", "Tur", "Jowar"],
+    "Rabi": ["Wheat", "Gram", "Safflower", "Jowar"],
+    "Zaid": ["Groundnut", "Sunflower", "Vegetables"]
+  },
+  "Gujarat": {
+    "Kharif": ["Cotton", "Groundnut", "Bajra", "Castor"],
+    "Rabi": ["Wheat", "Mustard", "Gram", "Cumin"],
+    "Zaid": ["Moong Dal", "Sesame", "Vegetables"]
+  },
+  "Rajasthan": {
+    "Kharif": ["Bajra", "Guar", "Maize", "Groundnut"],
+    "Rabi": ["Mustard", "Wheat", "Gram", "Barley"],
+    "Zaid": ["Moong Dal", "Watermelon", "Vegetables"]
+  },
+  "Madhya Pradesh": {
+    "Kharif": ["Soybean", "Rice (Paddy)", "Maize", "Tur"],
+    "Rabi": ["Wheat", "Gram", "Mustard", "Linseed"],
+    "Zaid": ["Moong Dal", "Sesame", "Vegetables"]
+  },
+  "Chhattisgarh": {
+    "Kharif": ["Rice (Paddy)", "Maize", "Groundnut"],
+    "Rabi": ["Wheat", "Gram", "Linseed", "Mustard"],
+    "Zaid": ["Moong Dal", "Vegetables"]
+  },
+  "West Bengal": {
+    "Kharif": ["Rice (Paddy)", "Jute", "Maize"],
+    "Rabi": ["Wheat", "Potato", "Mustard", "Lentils"],
+    "Zaid": ["Watermelon", "Moong Dal", "Sesame"]
+  },
+  "Odisha": {
+    "Kharif": ["Rice (Paddy)", "Maize", "Ragi"],
+    "Rabi": ["Gram", "Mustard", "Potato", "Groundnut"],
+    "Zaid": ["Moong Dal", "Sesame", "Vegetables"]
+  },
+  "Assam": {
+    "Kharif": ["Rice (Paddy)", "Tea", "Jute"],
+    "Rabi": ["Mustard", "Potato", "Pulses", "Wheat"],
+    "Zaid": ["Vegetables", "Maize"]
+  },
+  "Arunachal Pradesh": {
+    "Kharif": ["Rice (Paddy)", "Maize", "Millets"],
+    "Rabi": ["Wheat", "Mustard", "Potato", "Barley"],
+    "Zaid": ["Vegetables", "Ginger"]
+  },
+  "Sikkim": {
+    "Kharif": ["Large Cardamom", "Maize", "Rice (Paddy)"],
+    "Rabi": ["Wheat", "Mustard", "Potato", "Barley"],
+    "Zaid": ["Vegetables", "Ginger"]
+  },
+  "Himachal Pradesh": {
+    "Kharif": ["Apple", "Maize", "Paddy"],
+    "Rabi": ["Wheat", "Barley", "Mustard", "Potato"],
+    "Zaid": ["Vegetables", "Tomato"]
+  },
+  "Uttarakhand": {
+    "Kharif": ["Rice (Paddy)", "Millets", "Apple"],
+    "Rabi": ["Wheat", "Mustard", "Potato", "Barley"],
+    "Zaid": ["Vegetables", "Ginger"]
+  },
+  "Jammu & Kashmir": {
+    "Kharif": ["Apple", "Saffron", "Maize", "Paddy"],
+    "Rabi": ["Wheat", "Barley", "Mustard", "Walnut"],
+    "Zaid": ["Vegetables", "Moong"]
+  },
+  "Tamil Nadu": {
+    "Kharif": ["Rice (Paddy)", "Sugarcane", "Banana", "Cotton", "Groundnut"],
+    "Rabi": ["Rice (Thaladi)", "Groundnut", "Pulses", "Millets"],
+    "Zaid": ["Sesame", "Vegetables", "Watermelon"]
+  },
+  "Kerala": {
+    "Kharif": ["Rubber", "Coconut", "Banana", "Pepper", "Coffee"],
+    "Rabi": ["Rice (Mundakan)", "Pulses", "Sweet Potato", "Vegetables"],
+    "Zaid": ["Sesame", "Vegetables"]
+  },
+  "Karnataka": {
+    "Kharif": ["Coffee", "Ragi", "Maize", "Sugarcane", "Arecanut"],
+    "Rabi": ["Wheat", "Gram", "Mustard", "Sunflower"],
+    "Zaid": ["Moong Dal", "Groundnut", "Vegetables"]
+  },
+  "Telangana": {
+    "Kharif": ["Cotton", "Rice (Paddy)", "Maize", "Tur"],
+    "Rabi": ["Wheat", "Bengal Gram", "Groundnut", "Mustard"],
+    "Zaid": ["Sesame", "Moong Dal", "Vegetables"]
+  },
+  "Goa": {
+    "Kharif": ["Coconut", "Cashew", "Rice (Paddy)"],
+    "Rabi": ["Pulses", "Groundnut", "Vegetables"],
+    "Zaid": ["Sesame", "Vegetables"]
+  },
+  "Tripura": {
+    "Kharif": ["Rubber", "Rice (Paddy)", "Pineapple"],
+    "Rabi": ["Potato", "Mustard", "Pulses"],
+    "Zaid": ["Sesame", "Vegetables"]
+  },
+  "Mizoram": {
+    "Kharif": ["Rice (Paddy)", "Maize", "Orange"],
+    "Rabi": ["Pulses", "Potato", "Mustard"],
+    "Zaid": ["Sesame", "Vegetables"]
+  },
+  "Nagaland": {
+    "Kharif": ["Rice (Paddy)", "Maize", "Millets"],
+    "Rabi": ["Pulses", "Potato", "Mustard"],
+    "Zaid": ["Sesame", "Vegetables"]
+  },
+  "Manipur": {
+    "Kharif": ["Rice (Paddy)", "Maize", "Pulses"],
+    "Rabi": ["Potato", "Mustard", "Wheat"],
+    "Zaid": ["Sesame", "Vegetables"]
+  },
+  "Meghalaya": {
+    "Kharif": ["Potato", "Maize", "Ginger"],
+    "Rabi": ["Wheat", "Mustard", "Pulses"],
+    "Zaid": ["Sesame", "Vegetables"]
+  }
+}
+
+export const getCurrentSeason = (dateInput = new Date()) => {
+  const date = new Date(dateInput)
+  const month = date.getMonth(); // 0 = Jan, 1 = Feb, ..., 11 = Dec
+  // Kharif: June (5) to October (9)
+  // Rabi: November (10) to March (2)
+  // Zaid: April (3) to May (4)
+  if (month >= 5 && month <= 9) {
+    return 'Kharif'
+  } else if (month >= 10 || month <= 2) {
+    return 'Rabi'
+  } else {
+    return 'Zaid'
+  }
+}
+
+export const getRealisticGrowthStage = (crop, season, month = new Date().getMonth()) => {
+  // crop lifecycle stages: "Seedling", "Vegetative Growth", "Early Flowering", "Harvest Ready"
+  if (season === 'Kharif') {
+    if (month === 5) return 'Seedling' // June
+    if (month === 6 || month === 7) return 'Vegetative Growth' // July, August
+    if (month === 8) return 'Early Flowering' // September
+    return 'Harvest Ready' // October & onwards
+  } else if (season === 'Rabi') {
+    if (month === 10 || month === 11) return 'Seedling' // Nov, Dec
+    if (month === 0 || month === 1) return 'Vegetative Growth' // Jan, Feb
+    if (month === 2) return 'Early Flowering' // March
+    return 'Harvest Ready' // April
+  } else {
+    // Zaid
+    if (month === 3) return 'Seedling' // April
+    if (month === 4) return 'Early Flowering' // May
+    return 'Harvest Ready' // June
+  }
+}
+
 // Procedural village selector based on district names
 export const getVillageForDistrict = (districtName, idx, seed) => {
   const customVillages = {
@@ -278,7 +452,11 @@ export const generateFarmsForDistrict = (stateName, districtName, centerLat, cen
 
     const farmerName = config.farmerNames[(i - 1) % config.farmerNames.length]
     const village = getVillageForDistrict(districtName, i - 1, seed)
-    const crop = config.crops[(i - 1) % config.crops.length]
+
+    const currentSeason = getCurrentSeason()
+    const cropsList = regionalSeasonalCrops[stateName]?.[currentSeason] || config.crops
+    const crop = cropsList[(i - 1) % cropsList.length]
+    const growthStage = getRealisticGrowthStage(crop, currentSeason)
 
     // Area sizes based on segments: small (0.5-2ha), medium (2-5ha), large (5-15ha)
     const sizeType = random()
@@ -292,7 +470,6 @@ export const generateFarmsForDistrict = (stateName, districtName, centerLat, cen
     }
 
     const waterSource = waterSources[Math.floor(random() * waterSources.length)]
-    const growthStage = growthStages[Math.floor(random() * growthStages.length)]
     const irrigationMethod = irrigationMethods[Math.floor(random() * irrigationMethods.length)]
     const createdDate = `2024-${String(Math.floor(2 + random() * 4)).padStart(2, '0')}-${String(Math.floor(10 + random() * 18)).padStart(2, '0')}`
 
@@ -305,6 +482,7 @@ export const generateFarmsForDistrict = (stateName, districtName, centerLat, cen
       state: stateName,
       crop,
       area,
+      season: currentSeason,
       soilType: config.soil,
       waterSource,
       growthStage,
