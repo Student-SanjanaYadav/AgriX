@@ -127,19 +127,19 @@ const KPICards = ({ selectedFarm }) => {
             className={`p-6 min-h-[125px] rounded-2xl border backdrop-blur-md transition-all duration-300 flex items-center justify-between cursor-default ${cardBorderClass}`}
           >
             {/* KPI Details */}
-            <div className="space-y-1.5 text-left flex-1 min-w-0 mr-3">
-              <span className="text-[11px] text-slate-400 uppercase font-black tracking-wider block">{kpi.label}</span>
+            <div className="space-y-2 text-left flex-1 min-w-0 mr-3">
+              <span className="text-xs text-slate-400 uppercase font-black tracking-wider block mb-1">{kpi.label}</span>
               
               <motion.p 
                 key={kpi.value}
                 initial={{ scale: 0.95, opacity: 0.8 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="text-2xl md:text-3xl font-black tracking-tight text-slate-100 font-mono"
+                className="text-3xl md:text-4xl font-black tracking-tight text-slate-100 font-mono"
               >
                 {kpi.value}
               </motion.p>
               
-              <p className="text-xs text-slate-400 font-bold truncate">{kpi.subtext}</p>
+              <p className="text-sm text-slate-400 font-bold truncate">{kpi.subtext}</p>
             </div>
 
             {/* KPI Icon bubble */}

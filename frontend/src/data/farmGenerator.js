@@ -32,7 +32,7 @@ export const getAllDistrictMarkers = () => {
         lng: dist.lng,
         status: dist.status,
         moisture: dist.moisture,
-        crop: config.crops[0], // primary crop representation
+        crop: config.crops[0] || 'Wheat', // primary crop representation
         cropProfile: cropProfile
       })
     })
@@ -149,6 +149,14 @@ const originalStatesData = {
       { name: "Kathua", lat: 32.3833, lng: 75.5167, status: "moderate", moisture: "50%" }
     ]
   },
+  "Jharkhand": {
+    districts: [
+      { name: "Ranchi", lat: 23.3441, lng: 85.3096, status: "healthy", moisture: "62%" },
+      { name: "Dhanbad", lat: 23.7957, lng: 86.4304, status: "moderate", moisture: "48%" },
+      { name: "Jamshedpur", lat: 22.8046, lng: 86.2029, status: "healthy", moisture: "66%" },
+      { name: "Hazaribagh", lat: 23.9979, lng: 85.3667, status: "moderate", moisture: "54%" }
+    ]
+  },
   "Karnataka": {
     districts: [
       { name: "Chikmagalur", lat: 13.3161, lng: 75.7720, status: "healthy", moisture: "80%" },
@@ -167,6 +175,15 @@ const originalStatesData = {
       { name: "Kottayam", lat: 9.5916, lng: 76.5224, status: "healthy", moisture: "82%" },
       { name: "Palakkad", lat: 10.7867, lng: 76.6547, status: "moderate", moisture: "52%" },
       { name: "Thrissur", lat: 10.5276, lng: 76.2144, status: "healthy", moisture: "78%" }
+    ]
+  },
+  "Madhya Pradesh": {
+    districts: [
+      { name: "Bhopal", lat: 23.2599, lng: 77.4126, status: "healthy", moisture: "68%" },
+      { name: "Indore", lat: 22.7196, lng: 75.8577, status: "moderate", moisture: "52%" },
+      { name: "Jabalpur", lat: 23.1815, lng: 79.9864, status: "healthy", moisture: "60%" },
+      { name: "Ujjain", lat: 23.1760, lng: 75.7885, status: "moderate", moisture: "48%" },
+      { name: "Gwalior", lat: 26.2183, lng: 78.1828, status: "critical", moisture: "32%" }
     ]
   },
   "Maharashtra": {
@@ -260,11 +277,27 @@ const originalStatesData = {
       { name: "Vellore", lat: 12.9165, lng: 79.1325, status: "moderate", moisture: "42%" }
     ]
   },
+  "Telangana": {
+    districts: [
+      { name: "Hyderabad", lat: 17.3850, lng: 78.4867, status: "healthy", moisture: "60%" },
+      { name: "Warangal", lat: 17.9689, lng: 79.5941, status: "moderate", moisture: "48%" },
+      { name: "Karimnagar", lat: 18.4386, lng: 79.1288, status: "healthy", moisture: "64%" },
+      { name: "Nizamabad", lat: 18.6725, lng: 78.0941, status: "moderate", moisture: "52%" }
+    ]
+  },
   "Tripura": {
     districts: [
       { name: "West Tripura", lat: 23.8396, lng: 91.2743, status: "healthy", moisture: "80%" },
       { name: "South Tripura", lat: 23.2333, lng: 91.5000, status: "healthy", moisture: "78%" },
       { name: "Dhalai", lat: 23.8833, lng: 91.8333, status: "healthy", moisture: "82%" }
+    ]
+  },
+  "Uttarakhand": {
+    districts: [
+      { name: "Dehradun", lat: 30.3165, lng: 78.0322, status: "healthy", moisture: "70%" },
+      { name: "Haridwar", lat: 29.9457, lng: 78.1642, status: "moderate", moisture: "55%" },
+      { name: "Nainital", lat: 29.3803, lng: 79.4636, status: "healthy", moisture: "75%" },
+      { name: "Udham Singh Nagar", lat: 28.9833, lng: 79.5333, status: "healthy", moisture: "78%" }
     ]
   },
   "Uttar Pradesh": {
@@ -277,6 +310,55 @@ const originalStatesData = {
       { name: "Aligarh", lat: 27.8974, lng: 78.0880, status: "moderate", moisture: "48%" },
       { name: "Jhansi", lat: 25.4484, lng: 78.5685, status: "critical", moisture: "29%" },
       { name: "Prayagraj", lat: 25.4358, lng: 81.8463, status: "moderate", moisture: "50%" }
+    ]
+  },
+  "West Bengal": {
+    districts: [
+      { name: "Bardhaman", lat: 23.2324, lng: 87.8630, status: "healthy", moisture: "78%" },
+      { name: "Murshidabad", lat: 24.1800, lng: 88.2700, status: "healthy", moisture: "72%" },
+      { name: "Darjeeling", lat: 27.0410, lng: 88.2627, status: "healthy", moisture: "80%" },
+      { name: "Nadia", lat: 23.4700, lng: 88.5600, status: "moderate", moisture: "55%" }
+    ]
+  },
+  "Andaman & Nicobar Islands": {
+    districts: [
+      { name: "Port Blair", lat: 11.6234, lng: 92.7265, status: "healthy", moisture: "82%" },
+      { name: "Car Nicobar", lat: 9.1667, lng: 92.7500, status: "healthy", moisture: "85%" }
+    ]
+  },
+  "Chandigarh": {
+    districts: [
+      { name: "Chandigarh", lat: 30.7333, lng: 76.7794, status: "healthy", moisture: "72%" }
+    ]
+  },
+  "Dadra & Nagar Haveli and Daman & Diu": {
+    districts: [
+      { name: "Silvassa", lat: 20.2765, lng: 73.0083, status: "healthy", moisture: "70%" },
+      { name: "Daman", lat: 20.3974, lng: 72.8328, status: "healthy", moisture: "68%" }
+    ]
+  },
+  "Delhi": {
+    districts: [
+      { name: "Najafgarh", lat: 28.6090, lng: 76.9855, status: "moderate", moisture: "48%" },
+      { name: "Narela", lat: 28.8525, lng: 77.0950, status: "moderate", moisture: "50%" }
+    ]
+  },
+  "Ladakh": {
+    districts: [
+      { name: "Leh", lat: 34.1526, lng: 77.5771, status: "healthy", moisture: "65%" },
+      { name: "Kargil", lat: 34.5539, lng: 76.1349, status: "moderate", moisture: "52%" }
+    ]
+  },
+  "Lakshadweep": {
+    districts: [
+      { name: "Kavaratti", lat: 10.5667, lng: 72.6333, status: "healthy", moisture: "88%" },
+      { name: "Agatti", lat: 10.8500, lng: 72.1833, status: "healthy", moisture: "85%" }
+    ]
+  },
+  "Puducherry": {
+    districts: [
+      { name: "Puducherry", lat: 11.9416, lng: 79.8083, status: "healthy", moisture: "74%" },
+      { name: "Karaikal", lat: 10.9254, lng: 79.8380, status: "moderate", moisture: "52%" }
     ]
   }
 }

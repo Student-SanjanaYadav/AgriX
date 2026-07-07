@@ -132,43 +132,43 @@ const AgriXDecisionCenter = ({ selectedFarm, metrics, loading, progress }) => {
                       className="space-y-4"
                     >
                       <div className="space-y-2">
-                        <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider block">Selected Field Summary</span>
+                        <span className="text-[11px] text-slate-500 font-black uppercase tracking-wider block mb-1">Selected Field Summary</span>
                         <div className="grid grid-cols-2 gap-3 text-xs font-semibold text-slate-400">
                           <div className="p-3 rounded-xl bg-white/2 border border-white/5 flex justify-between items-center">
                             <span>Field Target:</span>
-                            <span className="text-slate-200 font-mono">{selectedFarm?.id ?? 'N/A'}</span>
+                            <span className="text-slate-200 font-mono text-sm font-bold">{selectedFarm?.id ?? 'N/A'}</span>
                           </div>
                           <div className="p-3 rounded-xl bg-white/2 border border-white/5 flex justify-between items-center">
                             <span>Crop Stage:</span>
-                            <span className="text-slate-200">{selectedFarm?.growthStage ?? metrics?.growthStage ?? 'Vegetative'}</span>
+                            <span className="text-slate-200 text-sm font-bold">{selectedFarm?.growthStage ?? metrics?.growthStage ?? 'Vegetative'}</span>
                           </div>
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider block">Current Field Status</span>
+                        <span className="text-[11px] text-slate-500 font-black uppercase tracking-wider block mb-1">Current Field Status</span>
                         <div className="grid grid-cols-2 gap-3 text-xs font-semibold text-slate-400">
                           <div className="p-3 rounded-xl bg-white/2 border border-white/5 flex justify-between items-center">
                             <span>Moisture level:</span>
-                            <span className="text-slate-200 font-mono">{selectedFarm?.moisture ?? '0%'}</span>
+                            <span className="text-slate-200 font-mono text-sm font-bold">{selectedFarm?.moisture ?? '0%'}</span>
                           </div>
                           <div className="p-3 rounded-xl bg-white/2 border border-white/5 flex justify-between items-center">
                             <span>NDVI reflectance:</span>
-                            <span className="text-slate-200 font-mono">{selectedFarm?.ndvi ?? '0.74'}</span>
+                            <span className="text-slate-200 font-mono text-sm font-bold">{selectedFarm?.ndvi ?? '0.74'}</span>
                           </div>
                         </div>
                       </div>
 
                       <div className="space-y-2">
-                        <span className="text-[9.5px] text-slate-500 font-black uppercase tracking-wider block">Operational Status</span>
+                        <span className="text-[11px] text-slate-500 font-black uppercase tracking-wider block mb-1">Operational Status</span>
                         <div className="grid grid-cols-2 gap-3 text-xs font-semibold text-slate-400">
                           <div className="p-3 rounded-xl bg-white/2 border border-white/5 flex justify-between items-center">
                             <span>Soil Silt profile:</span>
-                            <span className="text-slate-200">{selectedFarm?.soilType ?? metrics?.soilType ?? 'Alluvial'}</span>
+                            <span className="text-slate-200 text-sm font-bold">{selectedFarm?.soilType ?? metrics?.soilType ?? 'Alluvial'}</span>
                           </div>
                           <div className="p-3 rounded-xl bg-white/2 border border-white/5 flex justify-between items-center">
                             <span>Last Irrigation:</span>
-                            <span className="text-slate-200">{selectedFarm?.lastIrrigation ?? metrics?.lastIrrigation ?? '12h ago'}</span>
+                            <span className="text-slate-200 text-sm font-bold">{selectedFarm?.lastIrrigation ?? metrics?.lastIrrigation ?? '12h ago'}</span>
                           </div>
                         </div>
                       </div>

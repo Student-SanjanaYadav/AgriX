@@ -65,6 +65,14 @@ const Dashboard = () => {
         weatherData = fetched
         setWeather(fetched)
         setWeatherSourceStatus('live')
+        
+        window.dispatchEvent(new CustomEvent('farmNotification', { 
+          detail: { 
+            title: 'Weather Forecast Refreshed', 
+            desc: `Live weather telemetry updated for coordinates ${selectedFarm?.lat?.toFixed(3)}, ${selectedFarm?.lng?.toFixed(3)}.`, 
+            type: 'weather' 
+          } 
+        }))
       } catch (err) {
         const farmId = selectedFarm?.id ?? 'AGX-PB-001'
         const seed = farmId.charCodeAt(0) + (farmId.charCodeAt(1) || 65) + (farmId.charCodeAt(2) || 66)
@@ -86,6 +94,14 @@ const Dashboard = () => {
         weatherData = fallback
         setWeather(fallback)
         setWeatherSourceStatus('fallback')
+        
+        window.dispatchEvent(new CustomEvent('farmNotification', { 
+          detail: { 
+            title: 'Weather Sync Fallback', 
+            desc: `Offline weather indicators generated for ${selectedFarm?.district ?? 'District'}.`, 
+            type: 'weather' 
+          } 
+        }))
       }
 
       // Single source of truth metrics calculation
@@ -111,11 +127,64 @@ const Dashboard = () => {
       }
 
       const result = generateRecommendation(inputs)
+
+      // Evaluate telemetry and state change notification triggers
+      try {
+        const prevFarm = JSON.parse(localStorage.getItem('selectedFarm') || 'null')
+        const prevMetrics = JSON.parse(localStorage.getItem('selectedFarmMetrics') || 'null')
+
+        // 1. Crop health changes category
+        if (prevFarm && prevFarm.id === selectedFarm?.id && prevFarm.status !== selectedFarm?.status) {
+          window.dispatchEvent(new CustomEvent('farmNotification', {
+            detail: {
+              title: 'Crop Health Status Changed',
+              desc: `${selectedFarm.crop} health transitioned from ${prevFarm.status} to ${selectedFarm.status} in ${selectedFarm.district}.`,
+              type: 'sensor'
+            }
+          }))
+        }
+
+        // 2. Soil moisture becomes critical (< 30%)
+        const moistureNum = parseFloat(selectedFarm?.moisture) || 35
+        if (moistureNum < 30) {
+          window.dispatchEvent(new CustomEvent('farmNotification', {
+            detail: {
+              title: 'Critical Moisture Warning',
+              desc: `Critical dry conditions detected at ${selectedFarm?.name} (${selectedFarm?.moisture} VWC).`,
+              type: 'sensor'
+            }
+          }))
+        }
+
+        // 3. AI recommendation changes
+        if (prevMetrics && prevFarm && prevFarm.id === selectedFarm?.id && prevMetrics.recommendation !== result.recommendation) {
+          window.dispatchEvent(new CustomEvent('farmNotification', {
+            detail: {
+              title: 'AI Recommendation Changed',
+              desc: `Updated irrigation plan for ${selectedFarm?.crop}: "${result.recommendation}"`,
+              type: 'ai'
+            }
+          }))
+        }
+      } catch (err) {
+        console.error("Error evaluating storage notifications inside loadTelemetry:", err)
+      }
+
       setMetrics(result)
       
       // Keep localStorage synchronized reactively for reports page
       localStorage.setItem('selectedFarm', JSON.stringify(selectedFarm))
       localStorage.setItem('selectedFarmMetrics', JSON.stringify(result))
+      window.dispatchEvent(new Event('farmAnalyzed'))
+
+      // 4. Farm is analysed notification
+      window.dispatchEvent(new CustomEvent('farmNotification', {
+        detail: {
+          title: 'Field Telemetry Analysed',
+          desc: `Diagnostic scan successfully finished for ${selectedFarm?.name} (${selectedFarm?.crop}).`,
+          type: 'ai'
+        }
+      }))
       
       clearInterval(interval)
       setAnalysisProgress(100)
@@ -329,7 +398,7 @@ const Dashboard = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
-              className="font-sans font-black text-4xl md:text-5xl tracking-tight bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(52,211,153,0.2)] mb-2"
+              className="font-sans font-black text-5xl md:text-6xl tracking-tight bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(52,211,153,0.2)] mb-3"
             >
               AgriX
             </motion.h1>
@@ -338,7 +407,7 @@ const Dashboard = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="font-sans font-bold text-lg md:text-xl text-slate-200 tracking-wide mb-3 px-4"
+              className="font-sans font-bold text-xl md:text-2xl text-slate-200 tracking-wide mb-4 px-4"
             >
               AI-Powered Precision Agriculture Decision Intelligence
             </motion.h2>
@@ -347,7 +416,7 @@ const Dashboard = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.5 }}
-              className="text-xs md:text-sm text-slate-400 font-semibold tracking-wide max-w-xl mb-6 leading-relaxed px-4"
+              className="text-sm md:text-base text-slate-400 font-semibold tracking-wide max-w-2xl mb-8 leading-relaxed px-4"
             >
               Empowering Smarter Irrigation Through AI, Geospatial Intelligence & Predictive Analytics
             </motion.p>

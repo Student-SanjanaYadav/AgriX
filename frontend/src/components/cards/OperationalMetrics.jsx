@@ -165,10 +165,10 @@ const OperationalMetrics = ({ selectedFarm }) => {
             transition={{ delay: idx * 0.05 }}
             className="p-3.5 rounded-xl border border-white/5 bg-white/2 backdrop-blur-md flex items-center justify-between gap-4 cursor-default select-none hover:bg-white/4 hover:border-white/10 transition-all duration-200"
           >
-            <div className="space-y-1">
-              <span className="text-[9px] text-slate-500 uppercase font-bold tracking-wider">{metric.label}</span>
-              <p className="text-sm font-bold text-slate-100">{metric.value}</p>
-              <p className="text-[10px] text-slate-400 truncate max-w-[130px]">{metric.subtext}</p>
+            <div className="space-y-1.5 flex-1 min-w-0">
+              <span className="text-[11px] text-slate-500 uppercase font-black tracking-wider block mb-1">{metric.label}</span>
+              <p className="text-base font-black text-slate-100 leading-tight">{metric.value}</p>
+              <p className="text-xs text-slate-400 font-semibold truncate max-w-[130px]">{metric.subtext}</p>
             </div>
             <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/5 ${metric.iconColor}`}>
               <Icon className="h-4 w-4" />

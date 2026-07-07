@@ -172,6 +172,13 @@ export const generatePDFReport = (data) => {
     doc.text('Version 4.2.0 (Stable-Prod)', 160, 282)
 
     doc.save(`AgriX-Telemetry-${data.farmId || data.id || 'Report'}.pdf`)
+    window.dispatchEvent(new CustomEvent('farmNotification', { 
+      detail: { 
+        title: 'PDF Report Compiled', 
+        desc: `Precision telemetry report for ${data.id || data.farmId || 'Active Field'} downloaded successfully.`, 
+        type: 'report' 
+      } 
+    }))
   }
 }
 
@@ -209,6 +216,13 @@ export const generateCSVReport = (data) => {
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
+  window.dispatchEvent(new CustomEvent('farmNotification', { 
+    detail: { 
+      title: 'CSV Report Downloaded', 
+      desc: `Raw telemetry spreadsheet for ${data.id || data.farmId || 'Active Field'} saved successfully.`, 
+      type: 'report' 
+    } 
+  }))
 }
 
 // Trigger browser print layout for report profile
@@ -287,5 +301,12 @@ export const printReport = (data) => {
   setTimeout(() => {
     printWindow.print()
     printWindow.close()
+    window.dispatchEvent(new CustomEvent('farmNotification', { 
+      detail: { 
+        title: 'Report Print Triggered', 
+        desc: `Print layout compilation sent for ${data.id || data.farmId || 'Active Field'}.`, 
+        type: 'report' 
+      } 
+    }))
   }, 350)
 }

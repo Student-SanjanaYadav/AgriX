@@ -25,7 +25,7 @@ const SystemStatusBar = ({ selectedFarm }) => {
   return (
     <div className="w-full px-6 py-3 rounded-xl border border-white/5 bg-[#050816]/30 backdrop-blur-md flex flex-wrap items-center justify-between gap-4 select-none mb-6">
       {/* Left side: System Subcomponents */}
-      <div className="flex flex-wrap items-center gap-6 text-xs text-slate-300">
+      <div className="flex flex-wrap items-center gap-6 text-sm text-slate-300">
         
         {/* Edge AI Status */}
         <div className="flex items-center gap-2">
@@ -58,7 +58,7 @@ const SystemStatusBar = ({ selectedFarm }) => {
       </div>
 
       {/* Right side: Dynamic Analysis Timestamp */}
-      <div className="flex items-center gap-2 text-xs font-semibold text-slate-400">
+      <div className="flex items-center gap-2 text-sm font-semibold text-slate-400">
         <Clock className="h-4 w-4 text-blue-400 shrink-0 animate-pulse" />
         <span>Last AI Analysis:</span>
         <motion.span 

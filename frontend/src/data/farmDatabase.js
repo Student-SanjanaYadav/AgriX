@@ -175,6 +175,46 @@ export const regionalConfig = {
     crops: ["Potato", "Maize", "Ginger"],
     soil: "Forest Soil",
     farmerNames: ["P. Sangma", "Mary Lyngdoh", "K. Marbaniang", "John Kharshiing", "Grace Syiem", "Balseng Marak", "Ibapynhun", "Tengsim Shira"]
+  },
+  "Jharkhand": {
+    crops: ["Rice (Paddy)", "Maize", "Ragi", "Wheat", "Gram", "Mustard", "Vegetables", "Watermelon"],
+    soil: "Red Soil",
+    farmerNames: ["Rajesh Munda", "Sunita Oraon", "Karan Mahto", "Pooja Devi", "Amit Soren", "Manoj Kisku"]
+  },
+  "Andaman & Nicobar Islands": {
+    crops: ["Rice (Paddy)", "Coconut", "Arecanut", "Pulses", "Vegetables"],
+    soil: "Forest Soil",
+    farmerNames: ["S. K. Biswas", "P. K. Roy", "Niranjan Dey", "Anjali Baroi", "Sanjay Goldar", "Dipti Sarkar"]
+  },
+  "Chandigarh": {
+    crops: ["Maize", "Rice (Paddy)", "Wheat", "Mustard", "Vegetables"],
+    soil: "Alluvial Soil",
+    farmerNames: ["Baldev Singh", "Gurpreet Kaur", "Jaswant Singh", "Sukhwinder Singh", "Navjot Kaur"]
+  },
+  "Dadra & Nagar Haveli and Daman & Diu": {
+    crops: ["Rice (Paddy)", "Ragi", "Mango", "Pulses", "Wheat", "Vegetables"],
+    soil: "Black Soil",
+    farmerNames: ["Raman Patel", "Kamlesh Dhodi", "Savita ben Patel", "Bipin Warli", "Dinesh Patel"]
+  },
+  "Delhi": {
+    crops: ["Maize", "Bajra", "Rice (Paddy)", "Wheat", "Mustard", "Potato", "Watermelon", "Cucumber", "Vegetables"],
+    soil: "Alluvial Soil",
+    farmerNames: ["Sanjay Kumar", "Meena Sharma", "Satish Tyagi", "Preeti Devi", "Rajesh Tomar", "Amit Verma"]
+  },
+  "Ladakh": {
+    crops: ["Barley", "Wheat", "Alfalfa", "Peas", "Mustard", "Vegetables"],
+    soil: "Mountain Soil",
+    farmerNames: ["Rigzin Namgyal", "Stanzin Dolma", "Tsering Angchok", "Sonam Wangchuk", "Lobzang Tsultrim"]
+  },
+  "Lakshadweep": {
+    crops: ["Coconut", "Banana", "Root Vegetables", "Sesame", "Vegetables"],
+    soil: "Sandy Coral Soil",
+    farmerNames: ["Koyamma", "Attakoya", "Mullakoya", "Safiya", "Cheriyakoya", "Kunhikoya"]
+  },
+  "Puducherry": {
+    crops: ["Rice (Paddy)", "Sugarcane", "Coconut", "Groundnut", "Pulses", "Sesame", "Vegetables"],
+    soil: "Alluvial Soil",
+    farmerNames: ["Subramanian", "Lakshmi", "Anbazhagan", "Rajendran", "Ganesan", "Saraswathi"]
   }
 }
 
@@ -313,6 +353,46 @@ export const regionalSeasonalCrops = {
   "Meghalaya": {
     "Kharif": ["Potato", "Maize", "Ginger"],
     "Rabi": ["Wheat", "Mustard", "Pulses"],
+    "Zaid": ["Sesame", "Vegetables"]
+  },
+  "Jharkhand": {
+    "Kharif": ["Rice (Paddy)", "Maize", "Ragi"],
+    "Rabi": ["Wheat", "Gram", "Mustard"],
+    "Zaid": ["Vegetables", "Watermelon"]
+  },
+  "Andaman & Nicobar Islands": {
+    "Kharif": ["Rice (Paddy)", "Coconut", "Arecanut"],
+    "Rabi": ["Pulses", "Vegetables"],
+    "Zaid": ["Vegetables"]
+  },
+  "Chandigarh": {
+    "Kharif": ["Maize", "Rice (Paddy)"],
+    "Rabi": ["Wheat", "Mustard"],
+    "Zaid": ["Vegetables"]
+  },
+  "Dadra & Nagar Haveli and Daman & Diu": {
+    "Kharif": ["Rice (Paddy)", "Ragi", "Mango"],
+    "Rabi": ["Pulses", "Wheat"],
+    "Zaid": ["Vegetables"]
+  },
+  "Delhi": {
+    "Kharif": ["Maize", "Bajra", "Rice (Paddy)"],
+    "Rabi": ["Wheat", "Mustard", "Potato"],
+    "Zaid": ["Watermelon", "Cucumber", "Vegetables"]
+  },
+  "Ladakh": {
+    "Kharif": ["Barley", "Wheat", "Alfalfa"],
+    "Rabi": ["Peas", "Mustard"],
+    "Zaid": ["Vegetables"]
+  },
+  "Lakshadweep": {
+    "Kharif": ["Coconut", "Banana"],
+    "Rabi": ["Coconut", "Root Vegetables"],
+    "Zaid": ["Sesame", "Vegetables"]
+  },
+  "Puducherry": {
+    "Kharif": ["Rice (Paddy)", "Sugarcane", "Coconut"],
+    "Rabi": ["Rice (Paddy)", "Groundnut", "Pulses"],
     "Zaid": ["Sesame", "Vegetables"]
   }
 }
