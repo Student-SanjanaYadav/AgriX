@@ -16,6 +16,7 @@ import {
   Table
 } from 'lucide-react'
 import { generatePDFReport, generateCSVReport, printReport } from '../services/reportService'
+import SMSAdvisoryCard from '../components/common/SMSAdvisoryCard'
 
 const Reports = () => {
   const { t, language } = useLanguage()
@@ -120,123 +121,130 @@ const Reports = () => {
         </div>
       </div>
 
-      {/* 1. Active Selection Report Console */}
-      {selectedFarm && metrics ? (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.98 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="p-6 rounded-2xl border border-emerald-500/20 bg-gradient-to-r from-emerald-500/5 to-teal-500/0 backdrop-blur-md shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-6"
-        >
-          <div className="flex items-start gap-4">
-            <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mt-1 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
-              <ClipboardList className="h-6 w-6 animate-pulse" />
-            </div>
-            <div className="space-y-1.5 text-left">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  Target Field Scanned
-                </span>
-                <span className="text-[10px] text-slate-500 font-bold font-mono">
-                  Asset ID: {selectedFarm.id}
-                </span>
+      {/* 1. Active Selection Report Console / SMS Advisory Preview Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+        <div className="lg:col-span-8 flex flex-col justify-between">
+          {selectedFarm && metrics ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="p-6 rounded-2xl border border-emerald-500/20 bg-gradient-to-r from-emerald-500/5 to-teal-500/0 backdrop-blur-md shadow-2xl flex flex-col lg:flex-row lg:items-center justify-between gap-6 h-full text-left"
+            >
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mt-1 shadow-[0_0_15px_rgba(16,185,129,0.15)]">
+                  <ClipboardList className="h-6 w-6 animate-pulse" />
+                </div>
+                <div className="space-y-1.5 text-left">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                      Target Field Scanned
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-bold font-mono">
+                      Asset ID: {selectedFarm.id}
+                    </span>
+                  </div>
+                  <h3 className="font-bold text-slate-100 text-sm tracking-wide">
+                    Active Telemetry Report for {selectedFarm.village || selectedFarm.name.split(' Field')[0]} Plot
+                  </h3>
+                  <p className="text-xs text-slate-400 leading-normal max-w-xl">
+                    Ready to export dynamic diagnostic analytics sheet for this field sector. Includes crop health metrics (NDVI), soil saturation (VWC), weather logs, and AI irrigation recommendations.
+                  </p>
+                </div>
               </div>
-              <h3 className="font-bold text-slate-100 text-sm tracking-wide">
-                Active Telemetry Report for {selectedFarm.village || selectedFarm.name.split(' Field')[0]} Plot
-              </h3>
-              <p className="text-xs text-slate-400 leading-normal max-w-xl">
-                Ready to export dynamic diagnostic analytics sheet for this field sector. Includes crop health metrics (NDVI), soil saturation (VWC), weather logs, and AI irrigation recommendations.
-              </p>
+
+              {/* Export options grid */}
+              <div className="flex flex-wrap items-center gap-3 select-none">
+                {/* PDF export */}
+                <button
+                  onClick={() => generatePDFReport({
+                    farmId: selectedFarm.id,
+                    state: selectedFarm.state,
+                    district: selectedFarm.district,
+                    crop: selectedFarm.crop,
+                    area: selectedFarm.area,
+                    ndvi: selectedFarm.ndvi || '0.78',
+                    moisture: selectedFarm.moisture,
+                    status: selectedFarm.status,
+                    soilType: selectedFarm.soilType,
+                    weather: `${metrics.temp}, Humidity ${metrics.humidity}, Wind ${metrics.windSpeed}`,
+                    recommendation: metrics.recommendation,
+                    waterSaving: metrics.waterSaving,
+                    actionPlan: metrics.actionPlan,
+                    expectedImpact: metrics.expectedImpact,
+                    scenarioSummary: `${metrics.priority} Priority status override`
+                  }, language)}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 text-[#050816] font-bold shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:bg-emerald-400 transition-all cursor-pointer text-xs"
+                >
+                  <Download className="h-4 w-4" /> {t("Download PDF")}
+                </button>
+
+                {/* CSV export */}
+                <button
+                  onClick={() => generateCSVReport({
+                    farmId: selectedFarm.id,
+                    state: selectedFarm.state,
+                    district: selectedFarm.district,
+                    crop: selectedFarm.crop,
+                    area: selectedFarm.area,
+                    ndvi: selectedFarm.ndvi || '0.78',
+                    moisture: selectedFarm.moisture,
+                    status: selectedFarm.status,
+                    soilType: selectedFarm.soilType,
+                    weather: `${metrics.temp}, Humidity ${metrics.humidity}, Wind ${metrics.windSpeed}`,
+                    recommendation: metrics.recommendation,
+                    waterSaving: metrics.waterSaving,
+                    actionPlan: metrics.actionPlan,
+                    expectedImpact: metrics.expectedImpact,
+                    scenarioSummary: `${metrics.priority} Priority status override`
+                  }, language)}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-200 font-bold hover:bg-white/10 transition-all cursor-pointer text-xs"
+                >
+                  <Table className="h-4 w-4 text-cyan-400" /> {t("Download CSV")}
+                </button>
+
+                {/* Browser print */}
+                <button
+                  onClick={() => printReport({
+                    farmId: selectedFarm.id,
+                    state: selectedFarm.state,
+                    district: selectedFarm.district,
+                    crop: selectedFarm.crop,
+                    area: selectedFarm.area,
+                    ndvi: selectedFarm.ndvi || '0.78',
+                    moisture: selectedFarm.moisture,
+                    status: selectedFarm.status,
+                    soilType: selectedFarm.soilType,
+                    weather: `${metrics.temp}, Humidity ${metrics.humidity}, Wind ${metrics.windSpeed}`,
+                    recommendation: metrics.recommendation,
+                    waterSaving: metrics.waterSaving,
+                    actionPlan: metrics.actionPlan,
+                    expectedImpact: metrics.expectedImpact,
+                    scenarioSummary: `${metrics.priority} Priority status override`
+                  }, language)}
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-200 font-bold hover:bg-white/10 transition-all cursor-pointer text-xs"
+                >
+                  <Printer className="h-4 w-4 text-blue-400" /> {t("Print")}
+                </button>
+              </div>
+            </motion.div>
+          ) : (
+            <div className="p-6 rounded-2xl border border-white/5 bg-white/2 backdrop-blur-md flex items-center gap-4 text-left select-none h-full min-h-[140px]">
+              <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-slate-400">
+                <Sparkles className="h-6 w-6" />
+              </div>
+              <div>
+                <h4 className="font-bold text-slate-300 text-xs">No Active Selection Diagnostic Cached</h4>
+                <p className="text-[10px] text-slate-500 leading-normal mt-0.5 max-w-lg">
+                  To download a specific farm telemetry report, inspect a district on the Dashboard map, select a crop field polygon to trigger the AI analysis cycle, then return here to export.
+                </p>
+              </div>
             </div>
-          </div>
-
-          {/* Export options grid */}
-          <div className="flex flex-wrap items-center gap-3 select-none">
-            {/* PDF export */}
-            <button
-              onClick={() => generatePDFReport({
-                farmId: selectedFarm.id,
-                state: selectedFarm.state,
-                district: selectedFarm.district,
-                crop: selectedFarm.crop,
-                area: selectedFarm.area,
-                ndvi: selectedFarm.ndvi || '0.78',
-                moisture: selectedFarm.moisture,
-                status: selectedFarm.status,
-                soilType: selectedFarm.soilType,
-                weather: `${metrics.temp}, Humidity ${metrics.humidity}, Wind ${metrics.windSpeed}`,
-                recommendation: metrics.recommendation,
-                waterSaving: metrics.waterSaving,
-                actionPlan: metrics.actionPlan,
-                expectedImpact: metrics.expectedImpact,
-                scenarioSummary: `${metrics.priority} Priority status override`
-              }, language)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-500 text-[#050816] font-bold shadow-[0_0_15px_rgba(16,185,129,0.2)] hover:bg-emerald-400 transition-all cursor-pointer text-xs"
-            >
-              <Download className="h-4 w-4" /> {t("Download PDF")}
-            </button>
-
-            {/* CSV export */}
-            <button
-              onClick={() => generateCSVReport({
-                farmId: selectedFarm.id,
-                state: selectedFarm.state,
-                district: selectedFarm.district,
-                crop: selectedFarm.crop,
-                area: selectedFarm.area,
-                ndvi: selectedFarm.ndvi || '0.78',
-                moisture: selectedFarm.moisture,
-                status: selectedFarm.status,
-                soilType: selectedFarm.soilType,
-                weather: `${metrics.temp}, Humidity ${metrics.humidity}, Wind ${metrics.windSpeed}`,
-                recommendation: metrics.recommendation,
-                waterSaving: metrics.waterSaving,
-                actionPlan: metrics.actionPlan,
-                expectedImpact: metrics.expectedImpact,
-                scenarioSummary: `${metrics.priority} Priority status override`
-              }, language)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-200 font-bold hover:bg-white/10 transition-all cursor-pointer text-xs"
-            >
-              <Table className="h-4 w-4 text-cyan-400" /> {t("Download CSV")}
-            </button>
-
-            {/* Browser print */}
-            <button
-              onClick={() => printReport({
-                farmId: selectedFarm.id,
-                state: selectedFarm.state,
-                district: selectedFarm.district,
-                crop: selectedFarm.crop,
-                area: selectedFarm.area,
-                ndvi: selectedFarm.ndvi || '0.78',
-                moisture: selectedFarm.moisture,
-                status: selectedFarm.status,
-                soilType: selectedFarm.soilType,
-                weather: `${metrics.temp}, Humidity ${metrics.humidity}, Wind ${metrics.windSpeed}`,
-                recommendation: metrics.recommendation,
-                waterSaving: metrics.waterSaving,
-                actionPlan: metrics.actionPlan,
-                expectedImpact: metrics.expectedImpact,
-                scenarioSummary: `${metrics.priority} Priority status override`
-              }, language)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-200 font-bold hover:bg-white/10 transition-all cursor-pointer text-xs"
-            >
-              <Printer className="h-4 w-4 text-blue-400" /> {t("Print")}
-            </button>
-          </div>
-        </motion.div>
-      ) : (
-        <div className="p-6 rounded-2xl border border-white/5 bg-white/2 backdrop-blur-md flex items-center gap-4 text-left select-none">
-          <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-slate-400">
-            <Sparkles className="h-6 w-6" />
-          </div>
-          <div>
-            <h4 className="font-bold text-slate-300 text-xs">No Active Selection Diagnostic Cached</h4>
-            <p className="text-[10px] text-slate-500 leading-normal mt-0.5 max-w-lg">
-              To download a specific farm telemetry report, inspect a district on the Dashboard map, select a crop field polygon to trigger the AI analysis cycle, then return here to export.
-            </p>
-          </div>
+          )}
         </div>
-      )}
+        <div className="lg:col-span-4">
+          <SMSAdvisoryCard />
+        </div>
+      </div>
 
       {/* 2. Reports Table Panel */}
       <div className="p-6 rounded-2xl border border-white/5 bg-[#050816]/40 backdrop-blur-md shadow-2xl flex flex-col justify-between">

@@ -46,6 +46,116 @@ const VoiceAssistant = () => {
 
   // Parse voice commands and build dynamic templates from live dashboard data
   const processCommand = (transcript) => {
+    // 1. Transcript Normalization
+    const cleanText = transcript
+      .toLowerCase()
+      .trim()
+      .replace(/[?.,!;:]/g, '') // remove common punctuations
+      .replace(/\s+/g, ' ');     // collapse multiple spaces
+
+    // Define keyword mappings
+    const enFieldKeywords = [
+      'analyze', 'analyse', 'analyze field', 'analyse field', 'analyze my field', 
+      'analyse my field', 'analyze my farm', 'analyse my farm', 'farm analysis', 
+      'field analysis', 'check my farm', 'check field', 'check crop', 'check my crop', 
+      'crop status', 'field status', 'farm status', 'how is my farm', 'how is my field', 
+      'how is my crop', 'farm health', 'field report', 'analyze current field', 'show analysis'
+    ]
+    const hiFieldKeywords = [
+      'मेरे खेत का विश्लेषण करो', 'खेत का विश्लेषण', 'विश्लेषण करो', 'मेरे खेत की स्थिति', 
+      'खेत की स्थिति', 'मेरे खेत की रिपोर्ट', 'खेत की जानकारी', 'मेरे खेत का हाल', 
+      'खेत कैसा है', 'मेरी फसल कैसी है', 'मेरी फसल की रिपोर्ट', 'फसल की स्थिति', 
+      'फसल कैसी चल रही है'
+    ]
+
+    const enWeatherKeywords = [
+      'weather', 'weather today', "today's weather", 'tomorrow weather', 'forecast', 
+      'weather forecast', 'current weather', 'climate', 'rain', 'rainfall', 'will it rain', 
+      'will it rain today', 'rain forecast', 'temperature', 'humidity', 'wind'
+    ]
+    const hiWeatherKeywords = [
+      'मौसम', 'मौसम बताओ', 'मौसम कैसा है', 'मौसम की जानकारी', 'आज का मौसम', 
+      'कल का मौसम', 'बारिश होगी', 'आज बारिश होगी', 'कल बारिश होगी', 'बारिश की संभावना', 
+      'तापमान', 'आर्द्रता', 'हवा की गति'
+    ]
+
+    const enRecKeywords = [
+      'recommendation', 'recommend', 'advice', 'suggestion', 'ai advice', 
+      'ai recommendation', 'best action', 'next action', 'what should i do', 'what is your advice'
+    ]
+    const hiRecKeywords = [
+      'सुझाव', 'सलाह', 'एआई सुझाव', 'मुझे क्या करना चाहिए', 'आगे क्या करना चाहिए', 
+      'अगला कदम', 'सबसे अच्छा सुझाव'
+    ]
+
+    const enIrrigateKeywords = [
+      'irrigate', 'irrigation', 'should i irrigate', 'can i irrigate', 'need irrigation', 
+      'irrigation required', 'should i water', 'should i water today', 'water field', 
+      'water crop', 'water required'
+    ]
+    const hiIrrigateKeywords = [
+      'सिंचाई', 'क्या सिंचाई करनी चाहिए', 'सिंचाई करूँ', 'पानी देना चाहिए', 
+      'आज पानी देना चाहिए', 'खेत में पानी डालूँ', 'खेत में पानी डालना है', 'क्या खेत को पानी चाहिए'
+    ]
+
+    const enHealthKeywords = [
+      'crop health', 'plant health', 'crop condition', 'health', 'healthy', 'disease', 
+      'disease status', 'is my crop healthy'
+    ]
+    const hiHealthKeywords = [
+      'फसल की स्थिति', 'फसल स्वस्थ है', 'फसल कैसी है', 'पौधे की स्थिति', 'बीमारी', 'रोग'
+    ]
+
+    const enSummaryKeywords = [
+      'summary', 'summarize', 'overview', 'farm summary', 'complete summary', 'report'
+    ]
+    const hiSummaryKeywords = [
+      'सारांश', 'रिपोर्ट', 'पूरा विवरण', 'संक्षेप', 'स्थिति बताओ'
+    ]
+
+    const enRiskKeywords = [
+      'risk', 'danger', 'problem', 'issues', 'alerts', 'warning'
+    ]
+    const hiRiskKeywords = [
+      'जोखिम', 'खतरा', 'समस्या', 'चेतावनी', 'अलर्ट'
+    ]
+
+    const enMoistureKeywords = [
+      'soil moisture', 'moisture', 'water level', 'soil water'
+    ]
+    const hiMoistureKeywords = [
+      'मिट्टी की नमी', 'नमी', 'पानी का स्तर'
+    ]
+
+    const enHelpKeywords = [
+      'help', 'commands', 'available commands', 'show commands', 'guide me', 'how to use', 
+      'what can you do', 'start'
+    ]
+    const hiHelpKeywords = [
+      'मदद', 'सहायता', 'कमांड', 'कमांड दिखाओ', 'क्या कर सकते हो', 'कैसे उपयोग करें'
+    ]
+
+    const matchesIntent = (keywords) => {
+      return keywords.some(keyword => {
+        const kw = keyword.toLowerCase().trim().replace(/[?.,!;:]/g, '')
+        return cleanText === kw || cleanText.includes(kw)
+      })
+    }
+
+    // Match Help commands first (independent of selected farm validation)
+    const isHelp = isHindi ? matchesIntent(hiHelpKeywords) : matchesIntent(enHelpKeywords)
+    if (isHelp) {
+      return {
+        speech: isHindi 
+          ? "आप मुझसे खेत का विश्लेषण, मौसम, सिंचाई, फसल की स्थिति, एआई सुझाव या पूरे खेत का सारांश पूछ सकते हैं।"
+          : "You can ask me about farm analysis, weather, irrigation advice, crop health, AI recommendations, or a complete farm summary.",
+        text: isHindi
+          ? "आप मुझसे खेत का विश्लेषण, मौसम, सिंचाई, फसल की स्थिति, एआई सुझाव या पूरे खेत का सारांश पूछ सकते हैं।"
+          : "You can ask me about farm analysis, weather, irrigation advice, crop health, AI recommendations, or a complete farm summary."
+      }
+    }
+
+    // Validate selected farm for all other commands
     let selectedFarm = null
     let metrics = null
 
@@ -62,8 +172,6 @@ const VoiceAssistant = () => {
         text: isHindi ? 'कृपया पहले किसी खेत का चयन करें।' : 'Please select a farm first.'
       }
     }
-
-    const cleanText = transcript.trim().toLowerCase().replace(/[?.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
 
     const cropTranslations = {
       paddy: 'धान',
@@ -121,12 +229,14 @@ const VoiceAssistant = () => {
     const risk = metrics.risk || 'Low'
     const riskHindi = getTranslatedRisk(risk)
     const priority = metrics.priority || 'Normal'
+    const priorityHindi = isHindi ? (priority.toLowerCase() === 'high' ? 'उच्च' : priority.toLowerCase() === 'medium' ? 'मध्यम' : 'कम') : priority
     const recommendation = metrics.recommendation || 'N/A'
     const actionPlan = metrics.actionPlan || 'N/A'
     const growthStage = selectedFarm.growthStage || metrics.growthStage || 'Vegetative'
 
+    // Match Hindi Intents
     if (isHindi) {
-      if (cleanText.includes('विश्लेषण') || cleanText.includes('एनालाइज')) {
+      if (matchesIntent(hiFieldKeywords)) {
         const isRainExpected = parseFloat(rainProbability) > 50
         const weatherSentence = isRainExpected ? 'कल वर्षा होने की संभावना है।' : 'कल वर्षा की संभावना कम है।'
         const irrigateSentence = (status === 'healthy' || parseFloat(moisture) > 40) 
@@ -138,29 +248,29 @@ const VoiceAssistant = () => {
           text: `आपके चयनित खेत में ${cropHindi} की खेती हो रही है।\nफसल की स्थिति ${healthScore} प्रतिशत है।\nमिट्टी की नमी ${moisture} है।\n${weatherSentence}\n${irrigateSentence}`
         }
       }
-      
-      if (cleanText.includes('मौसम')) {
+
+      if (matchesIntent(hiWeatherKeywords)) {
         return {
           speech: `${district} में वर्तमान मौसम ${temp} है, आर्द्रता ${humidity} है, हवा की गति ${windSpeed} है, और बारिश की संभावना ${rainProbability} प्रतिशत है।`,
           text: `${district} में वर्तमान मौसम ${temp} है, आर्द्रता ${humidity} है, हवा की गति ${windSpeed} है, और बारिश की संभावना ${rainProbability} प्रतिशत है।`
         }
       }
 
-      if (cleanText.includes('फसल की स्थिति') || cleanText.includes('फसल की हालत') || cleanText.includes('फसल स्थिति') || cleanText.includes('फसल स्वास्थ्य')) {
+      if (matchesIntent(hiHealthKeywords)) {
         return {
           speech: `आपके ${cropHindi} के खेत का फसल स्वास्थ्य स्कोर ${healthScore} प्रतिशत है, जो कि ${statusHindi} स्थिति में है। विकास की अवस्था ${growthStage} है।`,
           text: `आपके ${cropHindi} के खेत का फसल स्वास्थ्य स्कोर ${healthScore} प्रतिशत है, जो कि ${statusHindi} स्थिति में है। विकास की अवस्था ${growthStage} है।`
         }
       }
 
-      if (cleanText.includes('सुझाव') || cleanText.includes('सिफारिश') || cleanText.includes('सलाह')) {
+      if (matchesIntent(hiRecKeywords)) {
         return {
           speech: `एआई सुझाव: ${recommendation}। कार्य योजना: ${actionPlan}।`,
           text: `एआई सुझाव: ${recommendation}।\nकार्य योजना: ${actionPlan}।`
         }
       }
 
-      if (cleanText.includes('सिंचाई') || cleanText.includes('पानी देना')) {
+      if (matchesIntent(hiIrrigateKeywords)) {
         let irrigateSentence = ''
         if (status === 'healthy' || parseFloat(moisture) > 40) {
           irrigateSentence = `मिट्टी की नमी ${moisture} पर अनुकूल है। सिंचाई को टाला जा सकता है।`
@@ -175,14 +285,29 @@ const VoiceAssistant = () => {
         }
       }
 
-      if (cleanText.includes('सारांश') || cleanText.includes('समरी')) {
+      if (matchesIntent(hiSummaryKeywords)) {
         return {
-          speech: `खेत ${selectedFarm.id} का सारांश। फसल: ${cropHindi}। स्वास्थ्य: ${healthScore} प्रतिशत। नमी: ${moisture}। जोखिम का स्तर: ${riskHindi}। प्राथमिकता: ${priority}।`,
-          text: `खेत ${selectedFarm.id} का सारांश।\nफसल: ${cropHindi}।\nस्वास्थ्य: ${healthScore} प्रतिशत।\nनमी: ${moisture}।\nजोखिम का स्तर: ${riskHindi}।\nप्राथमिकता: ${priority}।`
+          speech: `खेत ${selectedFarm.id} का सारांश। फसल: ${cropHindi}। स्वास्थ्य: ${healthScore} प्रतिशत। नमी: ${moisture}। जोखिम का स्तर: ${riskHindi}। प्राथमिकता: ${priorityHindi}।`,
+          text: `खेत ${selectedFarm.id} का सारांश।\nफसल: ${cropHindi}।\nस्वास्थ्य: ${healthScore} प्रतिशत।\nनमी: ${moisture}।\nजोखिम का स्तर: ${riskHindi}।\nप्राथमिकता: ${priorityHindi}।`
+        }
+      }
+
+      if (matchesIntent(hiRiskKeywords)) {
+        return {
+          speech: `फसल ${cropHindi} के लिए नैदानिक जोखिम का स्तर ${riskHindi} है। प्राथमिकता की स्थिति ${priorityHindi} है।`,
+          text: `फसल ${cropHindi} के लिए नैदानिक जोखिम का स्तर ${riskHindi} है।\nप्राथमिकता की स्थिति ${priorityHindi} है।`
+        }
+      }
+
+      if (matchesIntent(hiMoistureKeywords)) {
+        return {
+          speech: `मिट्टी की नमी का स्तर वर्तमान में ${moisture} है।`,
+          text: `मिट्टी की नमी का स्तर वर्तमान में ${moisture} है।`
         }
       }
     } else {
-      if (cleanText.includes('analyze my field') || cleanText.includes('analyze field') || cleanText.includes('field analysis') || cleanText.includes('diagnostics')) {
+      // Match English Intents
+      if (matchesIntent(enFieldKeywords)) {
         const isRainExpected = parseFloat(rainProbability) > 50
         const weatherSentence = isRainExpected ? 'Rain is expected tomorrow.' : 'Rain probability is low.'
         const irrigateSentence = (status === 'healthy' || parseFloat(moisture) > 40) 
@@ -195,28 +320,28 @@ const VoiceAssistant = () => {
         }
       }
 
-      if (cleanText.includes('weather') || cleanText.includes('climate') || cleanText.includes('forecast')) {
+      if (matchesIntent(enWeatherKeywords)) {
         return {
           speech: `The current weather in ${district} is ${temp} with ${humidity} humidity, wind speed of ${windSpeed}, and rain probability of ${rainProbability}%.`,
           text: `The current weather in ${district} is ${temp} with ${humidity} humidity, wind speed of ${windSpeed}, and rain probability of ${rainProbability}%.`
         }
       }
 
-      if (cleanText.includes('crop health') || cleanText.includes('health') || cleanText.includes('plant health')) {
+      if (matchesIntent(enHealthKeywords)) {
         return {
           speech: `The crop health score for your ${crop} field is ${healthScore}%, which is in ${status} status. Growth stage is ${growthStage}.`,
           text: `The crop health score for your ${crop} field is ${healthScore}%, which is in ${status} status. Growth stage is ${growthStage}.`
         }
       }
 
-      if (cleanText.includes('recommendation') || cleanText.includes('advice') || cleanText.includes('suggestion')) {
+      if (matchesIntent(enRecKeywords)) {
         return {
           speech: `AI Decision Recommendation: ${recommendation}. Action Plan: ${actionPlan}.`,
           text: `AI Decision Recommendation: ${recommendation}.\nAction Plan: ${actionPlan}.`
         }
       }
 
-      if (cleanText.includes('irrigate') || cleanText.includes('water')) {
+      if (matchesIntent(enIrrigateKeywords)) {
         let irrigateSentence = ''
         if (status === 'healthy' || parseFloat(moisture) > 40) {
           irrigateSentence = `Soil moisture is optimal at ${moisture}. Irrigation can be delayed.`
@@ -231,17 +356,36 @@ const VoiceAssistant = () => {
         }
       }
 
-      if (cleanText.includes('summary') || cleanText.includes('overall summary')) {
+      if (matchesIntent(enSummaryKeywords)) {
         return {
           speech: `Field ${selectedFarm.id} summary. Crop: ${crop}. Health: ${healthScore}%. Moisture: ${moisture}. Risk level: ${risk}. Priority: ${priority}.`,
           text: `Field ${selectedFarm.id} summary.\nCrop: ${crop}.\nHealth: ${healthScore}%.\nMoisture: ${moisture}.\nRisk level: ${risk}.\nPriority: ${priority}.`
         }
       }
+
+      if (matchesIntent(enRiskKeywords)) {
+        return {
+          speech: `The diagnostic risk level for crop ${crop} is ${risk} with priority status ${priority}.`,
+          text: `The diagnostic risk level for crop ${crop} is ${risk} with priority status ${priority}.`
+        }
+      }
+
+      if (matchesIntent(enMoistureKeywords)) {
+        return {
+          speech: `The soil moisture level is currently ${moisture}. VWC is within expected boundaries.`,
+          text: `The soil moisture level is currently ${moisture}. VWC is within expected boundaries.`
+        }
+      }
     }
 
+    // Default Fallback
     return {
-      speech: isHindi ? 'क्षमा करें, मैं इस आदेश को समझ नहीं पाया।' : 'Sorry, I didn\'t understand that command.',
-      text: isHindi ? 'क्षमा करें, मैं इस आदेश को समझ नहीं पाया।' : 'Sorry, I didn\'t understand that command.'
+      speech: isHindi 
+        ? "क्षमा करें, मैं आपकी बात समझ नहीं पाया। आप मौसम, फसल की स्थिति, सिंचाई, एआई सुझाव या खेत के विश्लेषण के बारे में पूछ सकते हैं।"
+        : "Sorry, I didn't understand that command. You can ask about weather, crop health, irrigation, AI recommendations, or farm analysis.",
+      text: isHindi
+        ? "क्षमा करें, मैं आपकी बात समझ नहीं पाया। आप मौसम, फसल की स्थिति, सिंचाई, एआई सुझाव या खेत के विश्लेषण के बारे में पूछ सकते हैं।"
+        : "Sorry, I didn't understand that command. You can ask about weather, crop health, irrigation, AI recommendations, or farm analysis."
     }
   }
 
