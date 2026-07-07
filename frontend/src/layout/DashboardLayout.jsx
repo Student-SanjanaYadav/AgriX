@@ -3,6 +3,7 @@ import Sidebar from './Sidebar'
 import Header from './Header'
 import { Network, BookOpen, HelpCircle, Mail } from 'lucide-react'
 import PremiumBackground from '../components/common/PremiumBackground'
+import VoiceAssistant from '../components/common/VoiceAssistant'
 
 const DashboardLayout = ({ children }) => {
   const [isCollapsed, setIsCollapsed] = useState(false)
@@ -68,6 +69,7 @@ const DashboardLayout = ({ children }) => {
           </div>
         </footer>
       </div>
+      <VoiceAssistant />
     </div>
   )
 }
