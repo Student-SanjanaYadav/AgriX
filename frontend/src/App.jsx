@@ -8,6 +8,7 @@ import Intelligence from './pages/Intelligence'
 import Weather from './pages/Weather'
 import Reports from './pages/Reports'
 import Settings from './pages/Settings'
+import CropDiagnosis from './pages/CropDiagnosis'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/intelligence" element={<Intelligence />} />
+            <Route path="/diagnosis" element={<CropDiagnosis />} />
             <Route path="/weather" element={<Weather />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/settings" element={<Settings />} />

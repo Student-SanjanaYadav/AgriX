@@ -11,17 +11,19 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
-  X
+  X,
+  Leaf
 } from 'lucide-react'
 import TransparentLogo from '../components/common/TransparentLogo'
 import logoImg from '../assets/logo.png'
 
 const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen }) => {
-  const { t } = useLanguage()
+  const { t, language } = useLanguage()
   const menuItems = [
     { name: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' },
     { name: 'Analytics', icon: TrendingUp, path: '/analytics' },
     { name: 'AgriX Intelligence', icon: BrainCircuit, path: '/intelligence' },
+    { name: '🌿 AI Crop Diagnosis', icon: Leaf, path: '/diagnosis' },
     { name: 'Weather', icon: CloudSun, path: '/weather' },
     { name: 'Reports', icon: FileText, path: '/reports' },
     { name: 'Settings', icon: Settings, path: '/settings' },
@@ -109,6 +111,12 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen }) => 
           {menuItems.map((item) => {
             const Icon = item.icon
             const isActive = item.name === activeItem
+            const getLocalizedName = (name) => {
+              if (name === '🌿 AI Crop Diagnosis') {
+                return language === 'hi' ? '🌿 एआई फसल निदान' : '🌿 AI Crop Diagnosis'
+              }
+              return t(name)
+            }
 
             return (
               <NavLink
@@ -139,7 +147,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen }) => 
                 {/* Menu Text */}
                 {!isCollapsed && (
                   <span className="font-medium text-sm tracking-wide transition-opacity duration-200">
-                    {t(item.name)}
+                    {getLocalizedName(item.name)}
                   </span>
                 )}
 
@@ -147,7 +155,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, mobileOpen, setMobileOpen }) => 
                 {isCollapsed && (
                   <div className="absolute left-20 scale-0 group-hover:scale-100 transition-all duration-200 origin-left z-50">
                     <div className="bg-[#0b0f2a] border border-white/10 px-3 py-1.5 rounded-lg shadow-xl">
-                      <p className="text-xs font-semibold text-slate-200 whitespace-nowrap">{t(item.name)}</p>
+                      <p className="text-xs font-semibold text-slate-200 whitespace-nowrap">{getLocalizedName(item.name)}</p>
                     </div>
                   </div>
                 )}
