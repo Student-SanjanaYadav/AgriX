@@ -18,7 +18,6 @@ import Charts from '../components/charts/Charts'
 import OperationalMetrics from '../components/cards/OperationalMetrics'
 import WeatherWidget from '../components/common/WeatherWidget'
 import ScenarioSimulator from '../components/ai/ScenarioSimulator'
-import CompareFarms from '../components/analytics/CompareFarms'
 import AnalysisLoader from '../components/common/AnalysisLoader'
 import TransparentLogo from '../components/common/TransparentLogo'
 import { generateRecommendation } from '../services/recommendationEngine'
@@ -535,13 +534,6 @@ const Dashboard = () => {
       <motion.div variants={itemVariants}>
         <div className="w-full">
           <ScenarioSimulator selectedFarm={selectedFarm} metrics={metrics} />
-        </div>
-      </motion.div>
-
-      {/* 8. Fifth Row: Compare Farms */}
-      <motion.div variants={itemVariants}>
-        <div className="w-full">
-          <CompareFarms />
         </div>
       </motion.div>
 
